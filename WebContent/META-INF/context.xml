@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/PanelTrackDB"
+    auth="Container"
+    type="javax.sql.DataSource"
+    username="SYSDBA"
+    password="masterkey"
+    driverClassName="org.firebirdsql.jdbc.FBDriver"
+    url="jdbc:firebirdsql://localhost:3050//home/rosskohler/Databases/PANELTRACK.FDB"
+    validationQuery="select 1 from rdb$database"
+
+    />
+</Context>
