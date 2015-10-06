@@ -1,65 +1,60 @@
 package com.example.employee;
 import java.text.DecimalFormat;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 	
 public class Employee{
    
-   private SimpleIntegerProperty ID = new SimpleIntegerProperty();
-   private SimpleStringProperty name = new SimpleStringProperty(); 
-   private SimpleIntegerProperty floor = new SimpleIntegerProperty();
-   private SimpleBooleanProperty treatment = new SimpleBooleanProperty();
-   private SimpleStringProperty email = new SimpleStringProperty();
+   private int ID;
+   private String name; 
+   private int floor;
+   private boolean treatment;
+   private String email;
    
    public String personalisedMessage;
    
    DecimalFormat twoDForm = new DecimalFormat("#.##");
 
    public Integer getID() {
-      return ID.get();
+      return ID;
    }
 
    public String getName() {
-      return name.get();
+      return name;
    }
    
    public int getFloor() {
-      return floor.get();
+      return floor;
    }
 
     public boolean getTreatment() {
-       return treatment.get();
+       return treatment;
     }
     
-    public BooleanProperty treatmentProperty(){
+    public boolean treatmentProperty(){
     	return treatment;
     }
 
     public String getEmail() {
-        return email.get();
+        return email;
     }
     public String getPersonalisedMessage(){
     	return personalisedMessage;
     }
     public void setID(int Id){
-    	ID.set(Id);
+    	this.ID = Id;
     }
     public void setName(String name){
-    	this.name.set(name);
+    	this.name = name;
     }
     public void setEmail(String emailAddress){
-    	email.set(emailAddress);
+    	email = emailAddress;
     }
    
     public void setFloor(int floorNumber){
-    	floor.set(floorNumber);
+    	floor = floorNumber;
     }
     public void setTreatment(boolean treatment){
-    	this.treatment.set(treatment);
+    	this.treatment = treatment;
     }
     public void setPersonalisedMessage(String personalisedMessage){
     	this.personalisedMessage = personalisedMessage;
@@ -67,19 +62,20 @@ public class Employee{
 
 	@Override
 	public String toString() {
-		return "Employee [name= " + name.get() + ", floor= " + floor.get() + ", treatment= "
-				+ treatment.get() + ", email= " + email.get() + "]";
+		return "Employee [name= " + name + ", floor= " + floor + ", treatment= "
+				+ treatment + ", email= " + email+ "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ID;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((floor == null) ? 0 : floor.hashCode());
+		result = prime * result + floor;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((treatment == null) ? 0 : treatment.hashCode());
+		result = prime * result + ((personalisedMessage == null) ? 0 : personalisedMessage.hashCode());
+		result = prime * result + (treatment ? 1231 : 1237);
 		return result;
 	}
 
@@ -92,28 +88,30 @@ public class Employee{
 		if (getClass() != obj.getClass())
 			return false;
 		Employee other = (Employee) obj;
+		if (ID != other.ID)
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (floor == null) {
-			if (other.floor != null)
-				return false;
-		} else if (!floor.equals(other.floor))
+		if (floor != other.floor)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (treatment == null) {
-			if (other.treatment != null)
+		if (personalisedMessage == null) {
+			if (other.personalisedMessage != null)
 				return false;
-		} else if (!treatment.equals(other.treatment))
+		} else if (!personalisedMessage.equals(other.personalisedMessage))
+			return false;
+		if (treatment != other.treatment)
 			return false;
 		return true;
 	}
+	
 	
     
     }

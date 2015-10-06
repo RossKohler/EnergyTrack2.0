@@ -3,52 +3,47 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 public class EnergyTip {
-private SimpleIntegerProperty ID = new SimpleIntegerProperty();
-private SimpleStringProperty energyTip = new SimpleStringProperty();
-private SimpleBooleanProperty enabled = new SimpleBooleanProperty();
-private SimpleStringProperty role = new SimpleStringProperty();
+private int ID;
+private String energyTip;
+private boolean enabled;
+private String role;
 
 public static List<String> roles = Arrays.asList("Employee","Energy Advocate");
 public String getEnergyTip(){
-	return energyTip.get();
+	return energyTip;
 	
 }
 
 public String getRole(){
-	return role.get();
+	return role;
 }
 
 public int getID(){
-	return ID.get();
+	return ID;
 }
 public boolean getEnabled(){
-	return enabled.get();
+	return enabled;
 	
 }
-public BooleanProperty enabledProperty(){
+public boolean enabledProperty(){
 	return enabled;
 }
 
 public void setEnergyTip(String energyTip ){	
-	this.energyTip.set(energyTip);
+	this.energyTip = energyTip;
 }
 
 public void setEnabled(boolean enabled){
-	this.enabled.set(enabled);
+	this.enabled = enabled;
 }
 
 public void setID(int ID){
-	this.ID.set(ID);
+	this.ID = ID;
 }
 
 public void setRole(String role){
-	this.role.set(role);
+	this.role = role;
 }
 
 
