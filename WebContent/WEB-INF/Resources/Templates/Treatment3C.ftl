@@ -1,4 +1,10 @@
-﻿<p><b>${floorWinner}</b> won last week’s challenge. Congratulations!</p>
+﻿﻿﻿<body bgcolor="#C5E0B3">
+
+<p>
+    <img src="cid:winner_banner">
+</p>
+
+<p><b>${floorWinner}</b> won last week’s challenge. Congratulations!</p>
 
 <p>Here are the top 3 floors:</p>
 
@@ -19,3 +25,5 @@
 <p>
     <img src="cid:wcglogo">
 </p>
+
+</body>

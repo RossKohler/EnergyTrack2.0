@@ -1,3 +1,9 @@
+﻿<body bgcolor="#C5E0B3">
+
+﻿<p>
+    <img src="cid:winner_banner">
+</p>
+
 ﻿<p>Dear ${name},</p>
 
 <p>Floor ${winnerFloor} has won last week’s challenge, ${reducingOrincreasing} their power use by ${winnerFloorChange}%, a higher percentage than all other floors. Congratulations!</p>
@@ -21,3 +27,5 @@
 <p>
     <img src="cid:wcglogo">
 </p>
+
+</body>
