@@ -1,7 +1,7 @@
 ﻿<body bgcolor="#C5E0B3">
 
 <p>
-    <img src="cid:advocateA_banner">
+    <img src="cid:advocateA_banner" height="100" width="800">
 </p>
 
 ﻿<p>Congratulations <b>${energyAdvocate}</b>! You have been chosen as this week’s Energy Savings Advocate for your floor. As the advocate, you should advise the rest of your floor on energy practices and coordinate activities to make sure everyone acts together to reduce energy use.</p>
@@ -18,7 +18,7 @@
 
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo" width = "800">
 </p>
 
 </body>

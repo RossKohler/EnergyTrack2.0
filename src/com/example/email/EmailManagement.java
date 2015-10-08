@@ -58,8 +58,8 @@ public class EmailManagement{
 	final static String username = ProgramPreferences.getEmailUser();
 	final static String password = ProgramPreferences.getEmailPass();
 	final static String basepath = VaadinService.getCurrent()
-            .getBaseDirectory().getAbsolutePath();
-	final static String imgURL = "/WEB-INF/Resources/Templates/wcglogo.jpg";
+            .getBaseDirectory().getAbsolutePath()+"/WEB-INF/Resources/Templates/";
+	final static String wcgImg = "wcglogo.png";
 public static Session getMailSession(){
 	
 	
@@ -121,7 +121,7 @@ public static Session getMailSession(){
 		multipart.addBodyPart(htmlPart);
 		
 		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+imgURL);
+		DataSource ds = new FileDataSource(basepath+wcgImg);
 		imgPart.setDataHandler(new DataHandler(ds));
 		
 		imgPart.setHeader("Content-ID","<wcglogo>");
@@ -169,11 +169,17 @@ public static void sendStageOneIntroEmail(){
 			BodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"intro1_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
+			
 			
 			message.setSubject("The 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
@@ -220,11 +226,15 @@ public static void sendStageTwoIntroEmailA(){
 			BodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"intro2_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
@@ -271,11 +281,15 @@ public static void sendStageTwoIntroEmailB(){
 			BodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"intro2_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
@@ -322,11 +336,15 @@ public static void sendAfternoonReminder(){
 			BodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"afternoon_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("Remember to switch off all office equipment and appliances");
 			message.setContent(multipart);
@@ -374,11 +392,15 @@ public static void sendEmployeeTipEmail(){
 			BodyPart htmlPart = new MimeBodyPart();
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"tips_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("How to save electricity on your floor");
 			message.setContent(multipart);
@@ -402,206 +424,7 @@ public static void sendEmployeeTipEmail(){
 	
 }
 
-/*public static void sendGroupAIntroEmail(){
-	try{
-		System.out.println("Sending project introduction emails to Group A...");
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(ProgramPreferences.getEmailAddress()));
-		Vector<String> emailAddresses = DatabaseQuery.getMailAddresses("Group A");
-		if(emailAddresses.isEmpty()){
-			return;
-		}
-		Address[] addressArray = new Address[emailAddresses.size()];
-		Iterator<String> emailIterator = emailAddresses.iterator();
-		int count = 0;
-		
-		while(emailIterator.hasNext()){
-			String address = emailIterator.next();
-			if(!isValidEmailAddress(address)){
-				System.out.println(address+" not a valid email Address!");
-			}
-			else{
-				
-				addressArray[count] = new InternetAddress(address);
-				count++;}	
-		}
-		
-		Multipart multipart = new MimeMultipart("related");
-		BodyPart htmlPart = new MimeBodyPart();
-		htmlPart.setContent(TemplateMarker.setGroupAIntroMessage(), "text/html; charset=UTF-8");
-		multipart.addBodyPart(htmlPart);
-		
-		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+imgURL);
-		imgPart.setDataHandler(new DataHandler(ds));
-		
-		imgPart.setHeader("Content-ID","<wcglogo>");
-		imgPart.setDisposition(MimeBodyPart.INLINE);
-		multipart.addBodyPart(imgPart);
-		message.setSubject("The Energy Savings Competition Begins Next Week");
-		message.setContent(multipart);
-		Transport transport = getMailSession().getTransport("smtp");
-		MailListener listener = new MailListener();
-		transport.addTransportListener(listener);
-		
-		transport.connect(username,password);
-		transport.sendMessage(message,addressArray);
-		transport.close();
-		transport.removeTransportListener(listener);
-		System.out.println("All Introductory to Group A have been sent");
-	}
-	 catch (MessagingException e) {
-		 	errorLogger.error("Error in EmailManagement",e);
-		 	System.out.println(e);
-			throw new RuntimeException(e);
-		}
-}*/
 
-
-/*public static void sendTreatmentOneEmail(){
-	
-	try{
-		System.out.println("Sending weekly consumption reports (Intervention 1)...");
-		Transport transport = getMailSession().getTransport("smtp");
-		MailListener listener = new MailListener();
-		transport.addTransportListener(listener);
-		
-		transport.connect(username,password);
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(emailAddress));
-		
-		Vector<Employee> groupEmployees = TemplateMarker.setTreatmentOneEmail();
-		Iterator<Employee> employeeIterator = groupEmployees.iterator();
-		while(employeeIterator.hasNext()){
-			
-			Employee employee = employeeIterator.next();
-			message.setRecipient(Message.RecipientType.CC,new InternetAddress(employee.getEmail()));
-			Multipart multipart = new MimeMultipart("related");
-			BodyPart htmlPart = new MimeBodyPart();
-			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
-			multipart.addBodyPart(htmlPart);
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
-			
-			message.setSubject("Weekly Usage Email");
-			message.setContent(multipart);
-			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
-		
-		
-		}
-		
-		transport.close();
-		transport.removeTransportListener(listener);
-		System.out.println("All weekly consumption reports(Intervention 1) have been sent.");
-	}
-	 catch (MessagingException e) {
-		 	errorLogger.error("Error in EmailManagement",e);
-			throw new RuntimeException(e);
-		}
-	
-	
-}*/
-
-/*public static void sendTreatmentTwoEmail(){
-	try{
-		System.out.println("Sending weekly consumption emails (intervention 2)...");
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(emailAddress));
-		Vector<Employee> groupEmployees = TemplateMarker.setTreatmentTwoEmail();
-		if(groupEmployees.isEmpty()){
-			return;
-		}
-		Iterator<Employee> employeeIterator = groupEmployees.iterator();
-		
-		Transport transport = getMailSession().getTransport("smtp");
-		MailListener listener = new MailListener();
-		transport.addTransportListener(listener);
-		transport.connect(username,password);
-		
-		while(employeeIterator.hasNext()){
-			Employee employee = employeeIterator.next();
-			message.setRecipient(Message.RecipientType.CC,new InternetAddress(employee.getEmail()));
-			Multipart multipart = new MimeMultipart("related");
-			BodyPart htmlPart = new MimeBodyPart();
-			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
-			multipart.addBodyPart(htmlPart);
-			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
-			
-			message.setSubject("Energy Saving Competition Results!");
-			message.setContent(multipart);
-			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());	
-		}
-		transport.close();
-		transport.removeTransportListener(listener);
-		System.out.println("All weekly consumption reports(Intervention 2) have been sent.");
-	
-		
-	}
-	 catch (MessagingException e) {
-		 	errorLogger.error("Error in EmailManagement",e);
-			throw new RuntimeException(e);
-		}
-	
-}*/
-
-/*public static void sendTreatmentThreeEmail(){
-	
-	try{
-		System.out.println("Sending weekly consumption emails (intervention 3)...");
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(emailAddress));
-		Vector<Employee> groupEmployees = TemplateMarker.setTreatmentThreeEmail();
-		Iterator<Employee> employeeIterator = groupEmployees.iterator();
-		
-		Transport transport = getMailSession().getTransport("smtp");
-		MailListener listener = new MailListener();
-		transport.addTransportListener(listener);
-		transport.connect(username,password);
-		
-		while(employeeIterator.hasNext()){
-			Employee employee = employeeIterator.next();
-			message.setRecipient(Message.RecipientType.CC,new InternetAddress(employee.getEmail()));
-			Multipart multipart = new MimeMultipart("related");
-			BodyPart htmlPart = new MimeBodyPart();
-			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
-			multipart.addBodyPart(htmlPart);
-			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
-			
-			message.setSubject("Energy Saving Competition Results!");
-			message.setContent(multipart);
-			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
-			
-		}
-		transport.close();
-		transport.removeTransportListener(listener);
-		System.out.println("All weekly consumption reports(Intervention 2) have been sent.");
-		
-	}
-	 catch (MessagingException e) {
-		 	errorLogger.error("Error in EmailManagement",e);
-			throw new RuntimeException(e);
-		}
-		
-		
-	
-	
-}*/
 
 public static void energyAdvocateEmail(){
 	try{
@@ -630,11 +453,15 @@ public static void energyAdvocateEmail(){
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
 			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"advocateA_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("You are this week�s Energy Savings Advocate!");
 			message.setContent(multipart);
@@ -687,11 +514,15 @@ public static void sendAdvocateNotiEmail(){
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
 			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"advocateB_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);;
 			
 			message.setSubject("Your Energy Savings Advocate this week is�");
 			message.setContent(multipart);
@@ -742,11 +573,15 @@ public static void sendCompetitionNoAdvocateEmail(){
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
 			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"winner_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("See who won last week�s Electricity Savings Competition! How did your floor do?");
 			message.setContent(multipart);
@@ -797,11 +632,15 @@ public static void sendCompetitionAdvocateEmail(){
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
 			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"winner_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("See who won last week's Electricity Savings Competition! How did your floor do?");
 			message.setContent(multipart);
@@ -853,11 +692,15 @@ public static void sendKitchenTipEmail(){
 			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
 			multipart.addBodyPart(htmlPart);
 			
-			BodyPart imgPart = new MimeBodyPart();
-			DataSource ds = new FileDataSource(basepath+imgURL);
-			imgPart.setDataHandler(new DataHandler(ds));
-			imgPart.setHeader("Content-ID","<wcglogo>");
-			multipart.addBodyPart(imgPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"kitchen_banner.png")));
+			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("Reduce electricity use in the kitchen");
 			message.setContent(multipart);
@@ -879,7 +722,7 @@ System.out.println("Kitchen tip emails have been sent.");
 errorLogger.info("Kitchen tip emails have been sent.");
 }
 
-public static void sendCustomEmail(int floor,String textMessage,String subject){
+/*public static void sendCustomEmail(int floor,String textMessage,String subject){
 	System.out.println("Sending custom email to floor "+floor+"...");
 	errorLogger.info("Sending custom email to floor "+floor+"...");
 	try{
@@ -910,7 +753,7 @@ public static void sendCustomEmail(int floor,String textMessage,String subject){
 		multipart.addBodyPart(textPart);
 		
 		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+imgURL);
+		DataSource ds = new FileDataSource(basepath+wcgImg);
 		imgPart.setDataHandler(new DataHandler(ds));
 		
 		imgPart.setHeader("Content-ID","<wcglogo>");
@@ -931,73 +774,8 @@ public static void sendCustomEmail(int floor,String textMessage,String subject){
 		}
 	
 
-}
+}*/
 
-/*public static void sendErrorLog(){
-	BufferedReader br = null;
-	String errorLog = "";
-	try{
-		br = new BufferedReader(new FileReader("resources/Log/EnergyTrack.log"));
-		String currentLine;
-		while((currentLine = br.readLine())!=null){
-			errorLog += currentLine;
-			
-		}
-		br.close();}
-	
-	
-	
-	
-	catch(IOException e){
-		errorLogger.error("Error in EmailManagement",e);
-	}
-	if(errorLog.length()!=0){
-	PrintWriter writer = null;
-	try {
-		writer = new PrintWriter("resources/Log/EnergyTrack.log")	;
-		writer.println();
-		writer.close();
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	Message message = new MimeMessage(getMailSession());
-	try {
-		message.setFrom(new InternetAddress(emailAddress));
-		Transport transport = getMailSession().getTransport("smtp");
-		transport.connect(username,password);
-		Multipart multipart = new MimeMultipart("related");
-		BodyPart textPart = new MimeBodyPart();
-		textPart.setContent(errorLog+"<p><img src=\"cid:wcglogo\"></p>","text/html; charset=UTF-8");
-		multipart.addBodyPart(textPart);
-		
-		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+imgURL);
-		imgPart.setDataHandler(new DataHandler(ds));
-		
-		imgPart.setHeader("Content-ID","<wcglogo>");
-		imgPart.setDisposition(MimeBodyPart.INLINE);
-		multipart.addBodyPart(imgPart);
-		message.setSubject("EnergyTrack Error Log for "+new Date());
-		message.setContent(multipart);
-		Address[] address = new Address[]{new InternetAddress("rossdkohler@gmail.com")};
-		
-		transport.sendMessage(message,address);	
-		
-		
-	} catch (AddressException e) {
-		// TODO Auto-generated catch block
-		errorLogger.error("Error in EmailManagement",e);
-	} catch (MessagingException e) {
-		// TODO Auto-generated catch block
-		errorLogger.error("Error in EmailManagement",e);
-	}}
-	
-	
-	
-		
-	}*/
 public static boolean isValidEmailAddress(String email) {
     if(email != null){
     	boolean result = true;

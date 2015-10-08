@@ -1,7 +1,7 @@
 ﻿﻿<body bgcolor="#C5E0B3">
 
 <p>
-    <img src="cid:advocateB_banner">
+    <img src="cid:advocateB_banner" height="100" width="800">
 </p>
 
 <p>Dear ${name},</p>
@@ -17,7 +17,7 @@
 
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo" width ="800">
 </p>
 
 </body>

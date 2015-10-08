@@ -1,3 +1,5 @@
+﻿<body bgcolor="#C5E0B3">
+
 <p>
 	<img src="cid:intro2_banner">
 </p>
@@ -19,3 +21,5 @@
 <p>
     <img src="cid:wcglogo">
 </p> 
+
+</body>

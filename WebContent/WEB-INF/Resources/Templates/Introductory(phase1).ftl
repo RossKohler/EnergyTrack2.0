@@ -1,8 +1,5 @@
 ﻿<body bgcolor="#C5E0B3">
-
-<p>
-	<img src="cid:intro1_banner">
-</p>
+<img src="cid:intro1_banner" height="100" width="800" >
 
 <p>Dear ${name},</p>
 
@@ -17,10 +14,8 @@
 <p>We can make the Government a greener place BETTER TOGETHER!</p>
 
 <p>- The 2Wise2Waste Electricity Savings Project</p>
-
+</body>
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo" width="800">
 </p>
-
-</body>

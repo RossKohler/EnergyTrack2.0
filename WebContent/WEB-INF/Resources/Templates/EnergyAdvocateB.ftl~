@@ -1,4 +1,6 @@
-﻿<p>
+﻿﻿<body bgcolor="#C5E0B3">
+
+<p>
     <img src="cid:advocateB_banner">
 </p>
 
@@ -17,3 +19,5 @@
 <p>
     <img src="cid:wcglogo">
 </p>
+
+</body>

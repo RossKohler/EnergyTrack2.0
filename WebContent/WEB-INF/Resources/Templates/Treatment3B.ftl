@@ -1,7 +1,7 @@
 ﻿<body bgcolor="#C5E0B3">
 
 ﻿﻿<p>
-    <img src="cid:winner_banner">
+    <img src="cid:winner_banner" height="100" width="800">
 </p>
 
 <p><b>${floorWinner}</b> won last week’s challenge. </b>${floorWinner}’s</b> energy advocate was <b>${winnerAdvocate}</b>. Congratulations!</p>
@@ -23,7 +23,7 @@
 <p>This week’s energy saving tip: <b style="color:green;">${energyTip}</b></p>
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo" width="800">
 </p>
 
 </body>
