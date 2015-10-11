@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import javafx.stage.StageStyle;
 
@@ -27,6 +28,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 
@@ -76,6 +78,7 @@ public class ProjectLayout extends VerticalLayout{
 		
 		
 		projectStageLayout.addComponent(projectStageGroup);
+		projectStageLayout.addComponent(new Label("Please note! Emails are disabled if the project is in stage 1!"));
 		
 		buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
@@ -130,32 +133,48 @@ public class ProjectLayout extends VerticalLayout{
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				int projectStage = ProgramPreferences.getProjectStage();
-				if(projectStage != 1){
-					Notification.show("Sending project introduction emails.",Notification.Type.TRAY_NOTIFICATION);
-				}
+				ConfirmDialog.show(UI.getCurrent(), "Please Confirm:","Are you sure you want to do this?","Yes","No", new ConfirmDialog.Listener(){
+
+					@Override
+					public void onClose(ConfirmDialog dialog) {
+						if(dialog.isConfirmed()){
+							int projectStage = ProgramPreferences.getProjectStage();
+							if(projectStage != 1){
+								Notification.show("Sending project introduction emails.",Notification.Type.TRAY_NOTIFICATION);
+							}
+							
+							Thread t1 = new Thread(new Runnable() {
+							     public void run()
+							     {
+							    	 int stage = ProgramPreferences.getProjectStage();
+							    	 if(stage !=1){
+							    		 errorLogger.info("Sending project introductory emails (stage +"+stage+")..");
+							    		 
+							    		 System.out.println("Sending Introductory emails...");
+							    	 if(stage ==2){
+							    		 EmailManagement.sendStageOneIntroEmail();
+							    		 errorLogger.info("*Send introductory email method* finished (stage +"+stage+").");
+							    	 }
+							    	 else if(stage == 3){
+							    		 EmailManagement.sendStageTwoIntroEmailA();
+							    		 EmailManagement.sendStageTwoIntroEmailB();
+							    		 errorLogger.info("*Send introductory email method* finished (stage +"+stage+").");
+							    	 }}
+							    	 
+							    	
+							    	
+							     }});  t1.start();
+							
+						}
+						
+					}
+					
+					
+					
+					
+				});
 				
-				Thread t1 = new Thread(new Runnable() {
-				     public void run()
-				     {
-				    	 int stage = ProgramPreferences.getProjectStage();
-				    	 if(stage !=1){
-				    		 errorLogger.info("Sending project introductory emails (stage +"+stage+")..");
-				    		 
-				    		 System.out.println("Sending Introductory emails...");
-				    	 if(stage ==2){
-				    		 EmailManagement.sendStageOneIntroEmail();
-				    		 errorLogger.info("*Send introductory email method* finished (stage +"+stage+").");
-				    	 }
-				    	 else if(stage == 3){
-				    		 EmailManagement.sendStageTwoIntroEmailA();
-				    		 EmailManagement.sendStageTwoIntroEmailB();
-				    		 errorLogger.info("*Send introductory email method* finished (stage +"+stage+").");
-				    	 }}
-				    	 
-				    	
-				    	
-				     }});  t1.start();
+		
 				
 			}
 		});
