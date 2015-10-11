@@ -32,6 +32,7 @@ public class EnergyTipLayout extends VerticalLayout {
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
 	
 	public EnergyTipLayout(){
+		this.setMargin(true);
 		mainLayout = new VerticalLayout();
 		energyTipTable = new Table();
 		TableQuery tableQuery = new TableQuery(employeeQuery, DatabaseConnection.retrieveJ2EEConnectionPool(), new FirebirdGenerator());

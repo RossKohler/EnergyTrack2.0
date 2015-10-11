@@ -37,6 +37,7 @@ public class EmployeeLayout extends VerticalLayout {
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
 	
 	public EmployeeLayout(){
+		this.setMargin(true);
 		Panel testPanel = new Panel();
 		mainLayout = new VerticalLayout();
 		employeeTable = new Table();

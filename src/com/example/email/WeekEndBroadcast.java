@@ -6,6 +6,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.example.energytrack2_0.QuartzContextListener;
 import com.example.programpreferences.ProgramPreferences;
 
 
@@ -19,7 +20,9 @@ public class WeekEndBroadcast implements Job {
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		   if(ProgramPreferences.getProjectStage()==1 || ProgramPreferences.getProjectStage()==2){
+		
+		   int projectStage = ProgramPreferences.getProjectStage(QuartzContextListener.context);
+		   if(projectStage ==1 || projectStage ==2){
 			   EmailManagement.sendAfternoonReminder();
 			   
 		   }

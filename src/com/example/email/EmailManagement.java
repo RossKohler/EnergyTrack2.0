@@ -17,6 +17,10 @@ import java.util.Vector;
 
 
 
+
+
+
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -45,20 +49,24 @@ import org.apache.log4j.Logger;
 import com.example.database.DatabaseQuery;
 import com.example.employee.Employee;
 import com.example.energytrack2_0.Log4jContextListener;
+import com.example.energytrack2_0.QuartzContextListener;
 import com.example.programpreferences.ProgramPreferences;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Notification;
 
 
 
 public class EmailManagement{
-	final static String emailAddress = ProgramPreferences.getEmailAddress();
+	final static String emailAddress = ProgramPreferences.getEmailAddress(QuartzContextListener.context);
 	final static Logger errorLogger = Logger.getLogger(EmailManagement.class);
 	
 	
-	final static String username = ProgramPreferences.getEmailUser();
-	final static String password = ProgramPreferences.getEmailPass();
-	final static String basepath = VaadinService.getCurrent()
-            .getBaseDirectory().getAbsolutePath()+"/WEB-INF/Resources/Templates/";
+	final static String username = ProgramPreferences.getEmailUser(QuartzContextListener.context);
+	final static String password = ProgramPreferences.getEmailPass(QuartzContextListener.context);
+	//final static String basepath = VaadinService.getCurrent()
+            //.getBaseDirectory().getAbsolutePath()+"/WEB-INF/Resources/Templates/";
+	final static String basepath = QuartzContextListener.context.getRealPath("/WEB-INF/Resources/Templates/");
+	
 	final static String wcgImg = "wcglogo.png";
 public static Session getMailSession(){
 	
@@ -70,8 +78,8 @@ public static Session getMailSession(){
 	props.put("mail.smtp.auth","true");
 	props.put("mail.smtp.ssl.trust","*");
 	props.put("mail.smtp.starttls.enable","true");
-	props.put("mail.smtp.host", ProgramPreferences.getHost());
-	props.put("mail.smtp.port", ProgramPreferences.getPort());
+	props.put("mail.smtp.host", ProgramPreferences.getHost(QuartzContextListener.context));
+	props.put("mail.smtp.port", ProgramPreferences.getPort(QuartzContextListener.context));
 	//props.put("mail.smtp.timeout",25000);
 	//props.put("mail.smtp.connectiontimeout",25000);
 	
@@ -91,57 +99,6 @@ public static Session getMailSession(){
 	
 	return session;
 	}
-
-/*public static void sendGroupBIntroEmail(){
-	try{
-		System.out.println("Sending project introduction emails to Group B...");
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(ProgramPreferences.getEmailAddress()));
-		Vector<String> emailAddresses = DatabaseQuery.getMailAddresses("Group B");
-		if(emailAddresses.isEmpty()){
-			return;
-		}
-		Address[] addressArray = new Address[emailAddresses.size()];
-		Iterator<String> emailIterator = emailAddresses.iterator();
-		int count = 0;
-		
-		while(emailIterator.hasNext()){
-			String address = emailIterator.next();
-			if(!isValidEmailAddress(address)){
-				System.out.println(address+" not a valid email Address!");
-			}
-			else{
-				addressArray[count] = new InternetAddress(address);
-				count++;}	
-		}
-		
-		Multipart multipart = new MimeMultipart("related");
-		BodyPart htmlPart = new MimeBodyPart();
-		htmlPart.setContent(TemplateMarker.setGroupBIntroMessage(), "text/html; charset=UTF-8");
-		multipart.addBodyPart(htmlPart);
-		
-		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+wcgImg);
-		imgPart.setDataHandler(new DataHandler(ds));
-		
-		imgPart.setHeader("Content-ID","<wcglogo>");
-		imgPart.setDisposition(MimeBodyPart.INLINE);
-		multipart.addBodyPart(imgPart);
-		message.setSubject("The Energy Savings Competition Begins Next Week");
-		message.setContent(multipart);
-		Transport transport = getMailSession().getTransport("smtp");
-		transport.addTransportListener(new MailListener());
-		transport.connect(username,password);
-		transport.sendMessage(message,addressArray);
-		transport.close();
-		System.out.println("All Introductory to Group B have been sent");
-	}
-	 catch (MessagingException e) {
-		 	errorLogger.error("Error in EmailManagement",e);
-		 	System.out.println(e);
-			throw new RuntimeException(e);
-		}
-}*/
 
 public static void sendStageOneIntroEmail(){
 	
@@ -245,7 +202,7 @@ public static void sendStageTwoIntroEmailA(){
 		}
 	transport.close();
 	transport.removeTransportListener(listener);
-	System.out.println("All introduction emails (stage 2- Group A) have been sent..");	
+	System.out.println("All introduction emails (stage 2- Group A) have been sent..");
 	errorLogger.info("All introduction emails (stage 2- Group A) have been sent..");
 		
 		
@@ -343,7 +300,7 @@ public static void sendAfternoonReminder(){
 			
 			BodyPart bannerPart = new MimeBodyPart();
 			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"afternoon_banner.png")));
-			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			bannerPart.setHeader("Content-ID","<afternoon_banner>");
 			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("Remember to switch off all office equipment and appliances");
@@ -399,7 +356,7 @@ public static void sendEmployeeTipEmail(){
 			
 			BodyPart bannerPart = new MimeBodyPart();
 			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"tips_banner.png")));
-			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			bannerPart.setHeader("Content-ID","<tips_banner>");
 			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("How to save electricity on your floor");
@@ -463,7 +420,7 @@ public static void energyAdvocateEmail(){
 			bannerPart.setHeader("Content-ID","<intro1_banner>");
 			multipart.addBodyPart(bannerPart);
 			
-			message.setSubject("You are this week�s Energy Savings Advocate!");
+			message.setSubject("You are this week's Energy Savings Advocate!");
 			message.setContent(multipart);
 			message.saveChanges();
 			transport.sendMessage(message,message.getAllRecipients());
@@ -699,7 +656,7 @@ public static void sendKitchenTipEmail(){
 			
 			BodyPart bannerPart = new MimeBodyPart();
 			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"kitchen_banner.png")));
-			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			bannerPart.setHeader("Content-ID","<kitchen_banner>");
 			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("Reduce electricity use in the kitchen");

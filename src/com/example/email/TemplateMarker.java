@@ -16,6 +16,7 @@ import com.example.floor.BuildingFloor;
 import com.example.floor.FloorMap;
 import com.example.employee.Employee;
 import com.example.energytrack2_0.Log4jContextListener;
+import com.example.energytrack2_0.QuartzContextListener;
 import com.vaadin.server.VaadinService;
 
 import freemarker.cache.FileTemplateLoader;
@@ -35,10 +36,9 @@ public class TemplateMarker {
 		
 		cfg = new Configuration();
 		FileTemplateLoader templateLoader = null;
-		String basepath = VaadinService.getCurrent()
-                .getBaseDirectory().getAbsolutePath();
+		String basepath = QuartzContextListener.context.getRealPath(url);
 		try {
-			templateLoader = new FileTemplateLoader(new File(basepath+url));
+			templateLoader = new FileTemplateLoader(new File(basepath));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

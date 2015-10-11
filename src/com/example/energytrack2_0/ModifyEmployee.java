@@ -67,7 +67,6 @@ public class ModifyEmployee extends Window {
 		
 		
 		mainLayout = new VerticalLayout();
-		mainLayout.setMargin(true);
 		mainLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 		
 		firstName = new TextField("First Name:");
@@ -146,6 +145,7 @@ public class ModifyEmployee extends Window {
 		
 		buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
+		buttonLayout.setMargin(true);
 		
 		Button insertButton = new Button();
 		if(isedit){

@@ -9,6 +9,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.log4j.Logger;
 
 import com.example.energytrack2_0.Log4jContextListener;
+import com.vaadin.ui.Notification;
 
 public class MailListener implements ConnectionListener,TransportListener {
 	

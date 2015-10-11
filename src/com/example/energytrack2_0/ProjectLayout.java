@@ -23,6 +23,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
@@ -48,13 +49,15 @@ public class ProjectLayout extends VerticalLayout{
 	
 	
 	public ProjectLayout(){
-		this.setSpacing(true);
+		this.setMargin(true);
+		//this.setSizeFull();
 		
 		projectStage = new Panel("Project Stage");
 		projectStageGroup = new OptionGroup("Please select the stage of the project below:");
 		
 		projectStageLayout = new VerticalLayout();
 		projectStageLayout.setSpacing(true);
+		projectStageLayout.setMargin(true);
 		projectStageGroup.addItems(stages);
 		projectStageGroup.setValue("Stage "+ProgramPreferences.getProjectStage());
 		projectStageGroup.addValueChangeListener(new ValueChangeListener(){
@@ -78,6 +81,7 @@ public class ProjectLayout extends VerticalLayout{
 		buttonLayout.setSpacing(true);
 		buttonLayout.setEnabled(false);
 		Button saveButton = new Button("Save Changes");
+		Label sendIntroLabel = new Label();
 		saveButton.addClickListener(new Button.ClickListener(){
 
 			@Override
@@ -85,6 +89,7 @@ public class ProjectLayout extends VerticalLayout{
 				ProgramPreferences.setProjectStage(stages.indexOf(projectStageGroup.getValue().toString())+1);
 				buttonLayout.setEnabled(false);
 				notifyLabel.setVisible(true);
+				sendIntroLabel.setValue("Send Stage "+ProgramPreferences.getProjectStage()+" emails to introduce the employees to the project.");
 				
 			}
 			
@@ -95,10 +100,13 @@ public class ProjectLayout extends VerticalLayout{
 			
 		});
 		Button cancelButton = new Button("Cancel");
+	
+		
 		cancelButton.addClickListener(new Button.ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
+				
 				projectStageGroup.setValue("Stage "+ProgramPreferences.getProjectStage());
 				buttonLayout.setEnabled(false);
 				notifyLabel.setVisible(true);
@@ -122,12 +130,18 @@ public class ProjectLayout extends VerticalLayout{
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
+				int projectStage = ProgramPreferences.getProjectStage();
+				if(projectStage != 1){
+					Notification.show("Sending project introduction emails.",Notification.Type.TRAY_NOTIFICATION);
+				}
+				
 				Thread t1 = new Thread(new Runnable() {
 				     public void run()
 				     {
 				    	 int stage = ProgramPreferences.getProjectStage();
 				    	 if(stage !=1){
 				    		 errorLogger.info("Sending project introductory emails (stage +"+stage+")..");
+				    		 
 				    		 System.out.println("Sending Introductory emails...");
 				    	 if(stage ==2){
 				    		 EmailManagement.sendStageOneIntroEmail();
@@ -149,7 +163,7 @@ public class ProjectLayout extends VerticalLayout{
 		
 		
 		
-		Label sendIntroLabel = new Label();
+		
 		sendIntroLabel.setValue("Send Stage "+ProgramPreferences.getProjectStage()+" emails to introduce the employees to the project.");
 		
 		introLayout.addComponents(sendButton,sendIntroLabel);
@@ -170,13 +184,13 @@ public class ProjectLayout extends VerticalLayout{
 		floorTable.setColumnHeaders(new String[]{"Floor #","Treatment Group","Energy Advocate","No. Employees","Floor Rank"});
 		floorTable.setSelectable(true);
 		floorTable.setMultiSelect(true);
-		
+		floorTable.setSizeUndefined();
 	
 		
 		projectTableLayout.addComponent(floorTable);
 		
 		Button editGroupButton = new Button("Change Group(s)");
-		editGroupButton.addListener(new Button.ClickListener() {
+		editGroupButton.addClickListener(new Button.ClickListener() {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -194,12 +208,15 @@ public class ProjectLayout extends VerticalLayout{
 			}
 		});
 		
-		projectTableLayout.setSizeFull();
+		
 		projectTableLayout.addComponent(editGroupButton);
+		projectTableLayout.setSizeFull();
 		projectTableLayout.setSpacing(true);
 		projectTablePanel.setContent(projectTableLayout);
-		this.addComponent(projectTablePanel);
 		
+		
+		this.addComponent(projectTablePanel);
+		this.setExpandRatio(projectTablePanel, 1);
 		
 		
 		

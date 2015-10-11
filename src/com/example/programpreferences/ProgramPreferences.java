@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 
 import com.example.energytrack2_0.Log4jContextListener;
@@ -38,8 +40,37 @@ public class ProgramPreferences{
 			errorLogger.error("Error in ProgramPreferences",e);
 			e.printStackTrace();
 		}
+		
+		catch(Exception e){
+			errorLogger.error("Error in ProgramPreferences",e);
+			e.printStackTrace();
+			
+		}
 	
 		}
+	
+	public static void openProperties(ServletContext context){
+	try{
+		input = new FileInputStream(context.getRealPath(url));
+		prop.load(input);
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		errorLogger.error("Error in ProgramPreferences",e);
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		errorLogger.error("Error in ProgramPreferences",e);
+		e.printStackTrace();
+	}
+	
+	catch(Exception e){
+		errorLogger.error("Error in ProgramPreferences",e);
+		e.printStackTrace();
+		
+	}
+		
+		
+	}
 	
 	public static void closeProperties(){
 		if(input != null){
@@ -47,6 +78,11 @@ public class ProgramPreferences{
 				input.close();
 			}
 			catch(IOException e){
+				errorLogger.error("Error in ProgramPreferences",e);
+				e.printStackTrace();
+				
+			}
+			catch(Exception e){
 				errorLogger.error("Error in ProgramPreferences",e);
 				e.printStackTrace();
 				
@@ -103,8 +139,30 @@ public class ProgramPreferences{
 		return emailAddress;
 		}
 	
+	public static String getEmailAddress(ServletContext context){
+		openProperties(context);
+		String emailAddress = null;
+		if(prop!= null && input != null){
+			emailAddress=prop.getProperty("emailAddress");
+		
+		}
+		closeProperties();
+		return emailAddress;
+		}
+	
 	public static String getEmailUser(){
 		openProperties();
+		String emailUser = null;
+		if(prop!= null && input != null){
+			emailUser=prop.getProperty("emailUser");
+		
+		}
+		closeProperties();
+		return emailUser;
+		}
+	
+	public static String getEmailUser(ServletContext context){
+		openProperties(context);
 		String emailUser = null;
 		if(prop!= null && input != null){
 			emailUser=prop.getProperty("emailUser");
@@ -124,6 +182,19 @@ public class ProgramPreferences{
 		closeProperties();
 		return emailPass;
 		}
+	
+	public static String getEmailPass(ServletContext context){
+		openProperties(context);
+		String emailPass = null;
+		if(prop!= null && input != null){
+			emailPass=prop.getProperty("emailPass");
+		
+		}
+		closeProperties();
+		return emailPass;
+		}
+	
+	
 	public static String getHost(){
 		openProperties();
 		String hostname = null;
@@ -135,8 +206,30 @@ public class ProgramPreferences{
 		return hostname;
 		}
 	
+	public static String getHost(ServletContext context){
+		openProperties(context);
+		String hostname = null;
+		if(prop!= null && input != null){
+			hostname=prop.getProperty("emailHost");
+		
+		}
+		closeProperties();
+		return hostname;
+		}
+	
 	public static String getPort(){
 		openProperties();
+		String port = null;
+		if(prop!= null && input != null){
+			port =prop.getProperty("emailPort");
+		
+		}
+		closeProperties();
+		return port;
+		}
+	
+	public static String getPort(ServletContext context){
+		openProperties(context);
 		String port = null;
 		if(prop!= null && input != null){
 			port =prop.getProperty("emailPort");
@@ -187,6 +280,16 @@ public class ProgramPreferences{
 		}
 		
 		
+	public static int getProjectStage(ServletContext context){
+		openProperties(context);
+		int projectStage=0;
+		if(prop!= null && input != null){
+			projectStage = Integer.parseInt(prop.getProperty("projectStage"));
+		}
+		closeProperties();
+		return projectStage;
+	}
+	
 	}
 
 

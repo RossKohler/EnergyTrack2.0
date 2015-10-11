@@ -1,5 +1,6 @@
 package com.example.energytrack2_0;
 
+import com.example.programpreferences.ProgramPreferences;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
@@ -32,14 +33,16 @@ public class MainView extends CustomComponent implements View {
 	});
 
 	public MainView() {
+		
 		MenuBar menuBar = new MenuBar();
 		HorizontalLayout menuLayout = new HorizontalLayout();
 		menuLayout.setWidth("100%");
 		
 		VerticalLayout mainLayout = new VerticalLayout();
-		menuBar.addItem("File", null);
-		menuBar.addItem("Edit", null);
-		menuBar.addItem("View", null);
+		//mainLayout.setMargin(true);
+		//menuBar.addItem("File", null);
+		//menuBar.addItem("Edit", null);
+		//menuBar.addItem("View", null);
 		menuLayout.addComponent(menuBar);
 		menuLayout.addComponent(text);
 		menuLayout.addComponent(logout);
@@ -49,7 +52,7 @@ public class MainView extends CustomComponent implements View {
 		
 		tabSheet.addTab(new HomeLayout(),"Home");
 		tabSheet.addTab(new EmployeeLayout(),"Employee Profiles");
-		tabSheet.addTab(new UsageLayout(), "Energy Usage");
+		//tabSheet.addTab(new UsageLayout(), "Energy Usage");
 		tabSheet.addTab(new EnergyTipLayout(),"Energy Tips");
 		tabSheet.addTab(new ProjectLayout(),"Project Management");
 		tabSheet.setSizeFull();

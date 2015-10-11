@@ -1,5 +1,6 @@
 package com.example.energytrack2_0;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -21,29 +22,25 @@ import com.example.email.KitchenTipBroadcast;
 import com.example.email.TemplateMarker;
 import com.example.email.WeekEndBroadcast;
 import com.example.email.WeekStartBroadcast;
+import com.example.programpreferences.ProgramPreferences;
 
 public class QuartzContextListener implements ServletContextListener {
 	Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
-
+	public static ServletContext context;
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-
-		// TODO Auto-generated method stub
-		/*
-		 * DatabaseQuery.weekCumulativeUsage(); DatabaseQuery.setCurrentUsage();
-		 * DatabaseQuery.set24hourUsage(); DatabaseQuery.setWeekUsage();
-		 * DatabaseQuery.setMonthUsage(); DatabaseQuery.setFloorRanks();
-		 */
+		
+		context = sce.getServletContext();
 		JobDetail databaseUpdate = JobBuilder.newJob(DatabaseUpdate.class)
 				.withIdentity("DatabaseUpdate").build();
 		CronTrigger updateTrigger = TriggerBuilder.newTrigger()
 				.withIdentity("updateTrigger").startNow()
 				.withSchedule(CronScheduleBuilder.cronSchedule("0 35 * * * ?"))
 				.forJob("DatabaseUpdate").build();
-		SchedulerFactory schFactory = new StdSchedulerFactory();
+		SchedulerFactory databaseFactory = new StdSchedulerFactory();
 		Scheduler sch;
 		try {
-			sch = schFactory.getScheduler();
+			sch = databaseFactory.getScheduler();
 			sch.start();
 			sch.scheduleJob(databaseUpdate, updateTrigger);
 		} catch (SchedulerException ex) {
@@ -60,6 +57,7 @@ public class QuartzContextListener implements ServletContextListener {
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 30 15 ? * FRI"))
 				.forJob("WeekEndBroadcast").build();
+		
 		SchedulerFactory weekEndFactory = new StdSchedulerFactory();
 		Scheduler weekEndSch;
 		try {
@@ -102,10 +100,12 @@ public class QuartzContextListener implements ServletContextListener {
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 0 9 ? * 4#3"))
 				.forJob("KitchenTipBroadcast").build();
-		SchedulerFactory kicthenTipFactory = new StdSchedulerFactory();
+		
+		
+		SchedulerFactory kitchenTipFactory = new StdSchedulerFactory();
 		Scheduler kitcheTipSch;
 		try {
-			kitcheTipSch = schFactory.getScheduler();
+			kitcheTipSch = kitchenTipFactory.getScheduler();
 			kitcheTipSch.start();
 			kitcheTipSch.scheduleJob(kitchenTipBroadcast, kitchenTipTrigger);
 		} catch (SchedulerException ex) {
@@ -126,7 +126,7 @@ public class QuartzContextListener implements ServletContextListener {
 		SchedulerFactory generalTipFactory = new StdSchedulerFactory();
 		Scheduler generalTipSch;
 		try {
-			generalTipSch = schFactory.getScheduler();
+			generalTipSch = generalTipFactory.getScheduler();
 			generalTipSch.start();
 			generalTipSch.scheduleJob(generalTipBroadcast, generalTipTrigger);
 		} catch (SchedulerException ex) {
