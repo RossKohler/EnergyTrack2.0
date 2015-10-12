@@ -3,7 +3,6 @@ package com.example.energytrack2_0;
 import javax.servlet.annotation.WebServlet;
 
 import org.apache.log4j.Logger;
-
 import com.example.database.DatabaseConnection;
 import com.example.email.TemplateMarker;
 import com.example.programpreferences.ProgramPreferences;
@@ -37,34 +36,15 @@ public class Energytrack2_0UI extends UI {
 	protected void init(VaadinRequest request) {
 		DatabaseConnection.createConnectionPool();
 		LOGGER.info("New session created!");
-		/*DefaultVerticalLoginForm loginForm = new DefaultVerticalLoginForm();
-		loginForm.addLoginListener(new LoginListener() {
-		    @Override
-		    public void onLogin(LoginEvent event) {
-		        System.err.println(
-		                "Logged in with user name " + event.getUserName() +
-		                        " and password of length " + event.getPassword().length());
-
-		    }
-		});*/
-		
-		/*VerticalLayout content = new VerticalLayout(loginForm);
-		
-		content.setSizeFull();
-		content.setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER);
-		content.setStyleName(Reindeer.LAYOUT_BLUE)
-		setCompositionRoot(loginForm);*/
-		
-		
 		Navigator navigator = new Navigator(this,this);
 		this.setNavigator(navigator);
 		navigator.addView(LoginView.NAME,new LoginView());
 		
 	    navigator.addView(MainView.NAME, new MainView());
 	    
-	    getNavigator().navigateTo(MainView.NAME);
+	    getNavigator().navigateTo(LoginView.NAME);
 	    
-	    /*navigator.addViewChangeListener(new ViewChangeListener(){
+	    navigator.addViewChangeListener(new ViewChangeListener(){
 
 			@Override
 			public boolean beforeViewChange(ViewChangeEvent event) {
@@ -91,7 +71,7 @@ public class Energytrack2_0UI extends UI {
 	    	
 	    	
 	    	
-	    });*/
+	    });
 		
 		
 		

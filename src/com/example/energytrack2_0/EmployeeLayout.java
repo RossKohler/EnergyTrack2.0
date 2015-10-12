@@ -32,6 +32,8 @@ public class EmployeeLayout extends VerticalLayout {
 	private Button addButton;
 	private Button editButton;
 	private Button removeButton;
+	private Button enableSelected;
+	private Button disableSelected;
 
 	
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
@@ -66,9 +68,16 @@ public class EmployeeLayout extends VerticalLayout {
 		editButton = new Button("Edit");
 		removeButton = new Button("Remove");
 		
+		enableSelected = new Button("Enable Selected");
+		disableSelected = new Button("Disable Selected");
+		
 		buttonLayout.addComponent(addButton);
 		buttonLayout.addComponent(editButton);
 		buttonLayout.addComponent(removeButton);
+		
+		buttonLayout.addComponent(enableSelected);
+		buttonLayout.addComponent(disableSelected);
+		
 		buttonLayout.setSpacing(true);
 		mainLayout.addComponent(buttonLayout);
 		//buttonLayout.setSizeFull();
@@ -80,6 +89,48 @@ public class EmployeeLayout extends VerticalLayout {
 				
 			}
 		});
+		
+	enableSelected.addClickListener(new Button.ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				for(Object itemId: (Set)employeeTable.getValue()){
+					container.getItem(itemId).getItemProperty("TREATMENT").setValue("1");
+					try {
+						container.commit();
+					} catch (UnsupportedOperationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				};
+				
+			}
+		});
+	
+	disableSelected.addClickListener(new Button.ClickListener() {
+		
+		@Override
+		public void buttonClick(ClickEvent event) {
+			for(Object itemId: (Set)employeeTable.getValue()){
+				container.getItem(itemId).getItemProperty("TREATMENT").setValue("0");
+				try {
+					container.commit();
+				} catch (UnsupportedOperationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			};
+			
+		}
+	});
 		
 	editButton.addClickListener(new Button.ClickListener() {
 			

@@ -64,7 +64,7 @@ public class LoginView extends CustomComponent implements View,
 		String password = this.password.getValue();
 
 		boolean isValid = username.equals("admin")
-				&& password.equals("password");
+				&& password.equals("dorpstreet");
 
 		if (isValid) {
 			getSession().setAttribute("user", username);

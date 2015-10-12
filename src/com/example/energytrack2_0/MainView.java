@@ -44,13 +44,13 @@ public class MainView extends CustomComponent implements View {
 		//menuBar.addItem("Edit", null);
 		//menuBar.addItem("View", null);
 		menuLayout.addComponent(menuBar);
-		menuLayout.addComponent(text);
+		//menuLayout.addComponent(text);
 		menuLayout.addComponent(logout);
-		menuLayout.setComponentAlignment(text, Alignment.MIDDLE_RIGHT);
+		//menuLayout.setComponentAlignment(text, Alignment.MIDDLE_RIGHT);
 		menuLayout.setComponentAlignment(logout,Alignment.MIDDLE_RIGHT);
 		TabSheet tabSheet = new TabSheet();
 		
-		tabSheet.addTab(new HomeLayout(),"Home");
+		//tabSheet.addTab(new HomeLayout(),"Home");
 		tabSheet.addTab(new EmployeeLayout(),"Employee Profiles");
 		//tabSheet.addTab(new UsageLayout(), "Energy Usage");
 		tabSheet.addTab(new EnergyTipLayout(),"Energy Tips");
@@ -67,8 +67,8 @@ public class MainView extends CustomComponent implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		String username = String.valueOf(getSession().getAttribute("user"));
-		text.setValue("Hello " + username);
+		//String username = String.valueOf(getSession().getAttribute("user"));
+		//text.setValue("Hello " + username);
 
 	}
 }

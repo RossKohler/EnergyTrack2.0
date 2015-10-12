@@ -29,6 +29,9 @@ public class EnergyTipLayout extends VerticalLayout {
 	private Button editButton;
 	private Button removeButton;
 	
+	private Button enableSelected;
+	private Button disableSelected;
+	
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
 	
 	public EnergyTipLayout(){
@@ -59,10 +62,16 @@ public class EnergyTipLayout extends VerticalLayout {
 		addButton = new Button("New");
 		editButton = new Button("Edit");
 		removeButton = new Button("Remove");
+		enableSelected = new Button("Enable Selected");
+		disableSelected = new Button("Disable Selected");
 		
 		buttonLayout.addComponent(addButton);
 		buttonLayout.addComponent(editButton);
 		buttonLayout.addComponent(removeButton);
+		
+		buttonLayout.addComponent(enableSelected);
+		buttonLayout.addComponent(disableSelected);
+		
 		buttonLayout.setSpacing(true);
 		mainLayout.addComponent(buttonLayout);
 		
@@ -74,6 +83,54 @@ public class EnergyTipLayout extends VerticalLayout {
 				
 			}
 		});
+		
+	enableSelected.addClickListener(new Button.ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				for(Object itemId: (Set)energyTipTable.getValue()){
+					container.getItem(itemId).getItemProperty("ENABLED").setValue("1");
+					
+					try {
+						container.commit();
+					} catch (UnsupportedOperationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+			}
+		});
+	
+	
+	disableSelected.addClickListener(new Button.ClickListener() {
+		
+		@Override
+		public void buttonClick(ClickEvent event) {
+			for(Object itemId: (Set)energyTipTable.getValue()){
+				container.getItem(itemId).getItemProperty("ENABLED").setValue("0");
+				
+				try {
+					container.commit();
+				} catch (UnsupportedOperationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		}
+	});
+		
+		
+		
 		
 	editButton.addClickListener(new Button.ClickListener() {
 			
@@ -116,7 +173,7 @@ public class EnergyTipLayout extends VerticalLayout {
 		});
 		
 		
-		
+		mainLayout.setSizeFull();
 		this.addComponent(mainLayout);
 		this.setSizeFull();
 		
