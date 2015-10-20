@@ -8,7 +8,7 @@
 
 <p>The kitchen is a room  filled with electrical equipment. Help reduce your  building’s / floor’s electricity use by following the following tips :</p> 
 
--	Use hot water sparingly form the tap / hydroboil<br />
+-	Use hot water sparingly from the tap / hydroboil<br />
 -	Boil the amount of hot water required <br />
 -	Switch-off kitchen appliances not in use <br />  
 -	Close the fridge door as soon as possible after opening it, ensure the seal is in tact, and that it closes properly .<br />

@@ -3,7 +3,9 @@ package com.example.energytrack2_0;
 import javax.servlet.annotation.WebServlet;
 
 import org.apache.log4j.Logger;
+
 import com.example.database.DatabaseConnection;
+import com.example.email.EmailManagement;
 import com.example.email.TemplateMarker;
 import com.example.programpreferences.ProgramPreferences;
 import com.vaadin.annotations.Theme;
@@ -34,7 +36,7 @@ public class Energytrack2_0UI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		DatabaseConnection.createConnectionPool();
+		DatabaseConnection.createConnectionPool();		
 		LOGGER.info("New session created!");
 		Navigator navigator = new Navigator(this,this);
 		this.setNavigator(navigator);

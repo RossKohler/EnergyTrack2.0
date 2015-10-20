@@ -14,7 +14,7 @@ public class KitchenTipBroadcast implements Job {
 		
 		  int projectStage = ProgramPreferences.getProjectStage(QuartzContextListener.context);
 		  
-		  if(projectStage ==1 || projectStage ==2){
+		  if(projectStage ==2 || projectStage ==3){
 			  EmailManagement.sendKitchenTipEmail();}	
 	}
 

@@ -1,7 +1,7 @@
 ﻿﻿<body bgcolor="#C5E0B3">
 
 <p>
-	<img src="cid:afternoon_banner">
+	<img src="cid:afternoon_banner" height="100" width="800">
 
 </p>
 
@@ -16,7 +16,7 @@
 <p>Have a great weekend!</p>
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo"width= "800">
 </p>
 
 </body>

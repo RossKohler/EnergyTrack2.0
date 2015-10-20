@@ -21,6 +21,8 @@ import java.util.Vector;
 
 
 
+
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -29,6 +31,7 @@ import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -51,6 +54,7 @@ import com.example.employee.Employee;
 import com.example.energytrack2_0.Log4jContextListener;
 import com.example.energytrack2_0.QuartzContextListener;
 import com.example.programpreferences.ProgramPreferences;
+import com.sun.mail.smtp.SMTPSendFailedException;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.Notification;
 
@@ -100,18 +104,24 @@ public static Session getMailSession(){
 	return session;
 	}
 
+
 public static void sendStageOneIntroEmail(){
 	
 	System.out.println("Sending project introduction emails (Stage 1)...");
 	errorLogger.info("Sending project introduction emails (Stage 1)...");
+	MailListener listener = null;
+	Transport transport = null;
+	Message message = null;
+	
 	try {
-		Transport transport = getMailSession().getTransport("smtp");
-		MailListener listener = new MailListener();
+		transport = getMailSession().getTransport("smtp");
+		listener = new MailListener();
 		transport.addTransportListener(listener);
 		transport.connect(username,password);
-		Message message = new MimeMessage(getMailSession());
+		message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
 		Vector<Employee> groupEmployees = TemplateMarker.setStageOneIntroMessage();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
 			
@@ -141,7 +151,24 @@ public static void sendStageOneIntroEmail(){
 			message.setSubject("The 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(SMTPSendFailedException e){
+				if(transport.isConnected()==false){
+					try {
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (MessagingException e1) {
+						e.printStackTrace();
+						errorLogger.error(e);
+					}
+					}
+			}
 		
 		
 		}
@@ -190,7 +217,7 @@ public static void sendStageTwoIntroEmailA(){
 			
 			BodyPart bannerPart = new MimeBodyPart();
 			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"intro2_banner.png")));
-			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			bannerPart.setHeader("Content-ID","<intro2_banner>");
 			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
@@ -224,6 +251,7 @@ public static void sendStageTwoIntroEmailB(){
 		Message message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
 		Vector<Employee> groupEmployees = TemplateMarker.setStageTwoIntroMessageB();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
 			
@@ -245,7 +273,7 @@ public static void sendStageTwoIntroEmailB(){
 			
 			BodyPart bannerPart = new MimeBodyPart();
 			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"intro2_banner.png")));
-			bannerPart.setHeader("Content-ID","<intro1_banner>");
+			bannerPart.setHeader("Content-ID","<intro2_banner>");
 			multipart.addBodyPart(bannerPart);
 			
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
@@ -279,6 +307,7 @@ public static void sendAfternoonReminder(){
 		Message message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
 		Vector<Employee> groupEmployees = TemplateMarker.setAfternoonReminder();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
 			
@@ -306,7 +335,23 @@ public static void sendAfternoonReminder(){
 			message.setSubject("Remember to switch off all office equipment and appliances");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(SMTPSendFailedException e){
+				if(transport.isConnected()==false){
+					try {
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (MessagingException e1) {
+						e.printStackTrace();
+						errorLogger.error(e);
+					}
+					}
+			}
 		
 		
 		}
@@ -335,6 +380,7 @@ public static void sendEmployeeTipEmail(){
 		Message message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
 		Vector<Employee> groupEmployees = TemplateMarker.setEmployeeTipEmail();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
 			
@@ -362,7 +408,23 @@ public static void sendEmployeeTipEmail(){
 			message.setSubject("How to save electricity on your floor");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(SMTPSendFailedException e){
+				if(transport.isConnected()==false){
+					try {
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (MessagingException e1) {
+						e.printStackTrace();
+						errorLogger.error(e);
+					}
+					}
+			}
 		
 		
 		}
@@ -634,6 +696,7 @@ public static void sendKitchenTipEmail(){
 		transport.connect(username,password);
 		
 		Vector<Employee> groupEmployees = TemplateMarker.setKitchenTipEmail();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 		while(employeeIterator.hasNext()){
 			Employee employee = employeeIterator.next();
@@ -662,7 +725,23 @@ public static void sendKitchenTipEmail(){
 			message.setSubject("Reduce electricity use in the kitchen");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(SMTPSendFailedException e){
+				if(transport.isConnected()==false){
+					try {
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (MessagingException e1) {
+						e.printStackTrace();
+						errorLogger.error(e);
+					}
+					}
+			}
 		}
 		transport.close();
 		transport.removeTransportListener(listener);
@@ -679,59 +758,6 @@ System.out.println("Kitchen tip emails have been sent.");
 errorLogger.info("Kitchen tip emails have been sent.");
 }
 
-/*public static void sendCustomEmail(int floor,String textMessage,String subject){
-	System.out.println("Sending custom email to floor "+floor+"...");
-	errorLogger.info("Sending custom email to floor "+floor+"...");
-	try{
-		Message message = new MimeMessage(getMailSession());
-		message.setFrom(new InternetAddress(emailAddress));
-		Vector<String> emails = DatabaseQuery.getFloorEmail(floor);
-		Iterator<String> emailIterator = emails.iterator();
-		Address[] addressArray = new Address[emails.size()];
-		int count = 0;
-		
-		Transport transport = getMailSession().getTransport("smtp");
-		transport.addTransportListener(new MailListener());
-		transport.connect(username,password);
-		while(emailIterator.hasNext()){
-			String address = emailIterator.next();
-			if(!isValidEmailAddress(address)){
-				System.out.println(address+" not a valid email Address!");
-			}
-			else{
-				
-				addressArray[count] = new InternetAddress(address);
-				count++;}	
-		}
-		
-		Multipart multipart = new MimeMultipart("related");
-		BodyPart textPart = new MimeBodyPart();
-		textPart.setContent(textMessage+"<p><img src=\"cid:wcglogo\"></p>","text/html; charset=UTF-8");
-		multipart.addBodyPart(textPart);
-		
-		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(basepath+wcgImg);
-		imgPart.setDataHandler(new DataHandler(ds));
-		
-		imgPart.setHeader("Content-ID","<wcglogo>");
-		imgPart.setDisposition(MimeBodyPart.INLINE);
-		multipart.addBodyPart(imgPart);
-		message.setSubject(subject);
-		message.setContent(multipart);
-		transport.sendMessage(message,addressArray);	
-		
-		transport.close();
-		System.out.println("Custom emails with subject '"+subject+"' have been sent");
-		errorLogger.info("Custom emails with subject '"+subject+"' have been sent");
-	}
-	 catch (Exception e) {
-		 	System.out.println("ERROR (OPERATION NOT COMPLETE)");
-		 	e.printStackTrace();
-		  	errorLogger.error(e);
-		}
-	
-
-}*/
 
 public static boolean isValidEmailAddress(String email) {
     if(email != null){

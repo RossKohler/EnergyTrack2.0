@@ -30,12 +30,12 @@ public class ModifyGroup extends Window {
 		//this.setWidth("10%");
 		//this.setHeight("10%");
 		this.center();
-		
 		mainLayout = new VerticalLayout();
 		mainLayout.setSpacing(true);
-		
+		mainLayout.setMargin(true);
 		
 		buttonLayout = new HorizontalLayout();
+		buttonLayout.setSpacing(true);
 		Button doneButton = new Button("Done");
 		Button cancelButton = new Button("Cancel");
 		
@@ -84,6 +84,7 @@ public class ModifyGroup extends Window {
 		groupBox.addItem("Control Group");
 		groupBox.addItem("Group A");
 		groupBox.addItem("Group B");
+		groupBox.setTextInputAllowed(false);
 		groupBox.setValue(groupBox.getItemIds().iterator().next());
 		
 		mainLayout.addComponent(groupBox);

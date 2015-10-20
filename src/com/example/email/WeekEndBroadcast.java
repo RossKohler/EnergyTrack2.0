@@ -22,7 +22,7 @@ public class WeekEndBroadcast implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		
 		   int projectStage = ProgramPreferences.getProjectStage(QuartzContextListener.context);
-		   if(projectStage ==1 || projectStage ==2){
+		   if(projectStage ==2 || projectStage ==3){
 			   EmailManagement.sendAfternoonReminder();
 			   
 		   }

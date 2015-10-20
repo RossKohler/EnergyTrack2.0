@@ -14,14 +14,16 @@ import com.vaadin.ui.Notification;
 public class MailListener implements ConnectionListener,TransportListener {
 	
 	final static Logger infoLogger = Logger.getLogger(MailListener.class);
+	public static int totalEmails=0;
+	private int emailNumber=1;
 	@Override
 	public void messageDelivered(TransportEvent e) {
 	        if (e != null) {
 	            Address[] a = e.getValidSentAddresses();
 	        if (a != null && a.length > 0) {
 	            for (int i = 0; i < a.length; i++) {
-	            	infoLogger.info("Email to "+((InternetAddress) a[i]).getAddress()+" delivered!");
-	                //System.out.println("Email to "+((InternetAddress) a[i]).getAddress()+" delivered!");
+	            	infoLogger.info("Email to "+((InternetAddress) a[i]).getAddress()+" delivered! ("+emailNumber+"/"+totalEmails+")");
+	            	emailNumber++;
 	            }
 	        }
 	        }
@@ -34,7 +36,8 @@ public class MailListener implements ConnectionListener,TransportListener {
 	            Address[] a = e.getValidUnsentAddresses();
 	        if (a != null && a.length > 0) {
 	            for (int i = 0; i < a.length; i++) {
-	            	infoLogger.info("Email to "+((InternetAddress) a[i]).getAddress()+" not delivered!");
+	            	infoLogger.info("Email to "+((InternetAddress) a[i]).getAddress()+" not delivered!("+emailNumber+"/"+totalEmails+")");
+	            	emailNumber++;
 	                //System.out.println("Email to "+((InternetAddress) a[i]).getAddress()+" not delivered!");
 	            }
 	        }

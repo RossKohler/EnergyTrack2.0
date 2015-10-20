@@ -33,7 +33,6 @@ public class MainView extends CustomComponent implements View {
 	});
 
 	public MainView() {
-		
 		MenuBar menuBar = new MenuBar();
 		HorizontalLayout menuLayout = new HorizontalLayout();
 		menuLayout.setWidth("100%");

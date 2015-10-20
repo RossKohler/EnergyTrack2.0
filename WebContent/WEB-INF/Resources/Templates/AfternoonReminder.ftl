@@ -1,9 +1,7 @@
 ﻿﻿<body bgcolor="#C5E0B3">
 
-<p>
-	<img src="cid:afternoon_banner" height="100" width="800">
+<img src="cid:afternoon_banner" height="100" width="800">
 
-</p>
 
 <p>Dear ${name},</p>
 
@@ -14,9 +12,8 @@
 <p>Thanks for helping us to meet our target of reducing electricity usage by 10% across all Provincial Buildings by 2015. Let us make using electricity efficiently BETTER TOGETHER!</p>
 
 <p>Have a great weekend!</p>
+</body>
 
 <p>
     <img src="cid:wcglogo"width= "800">
 </p>
-
-</body>

@@ -17,6 +17,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.example.database.DatabaseQuery;
 import com.example.database.DatabaseUpdate;
+import com.example.email.EmailManagement;
 import com.example.email.GeneralTipBroadcast;
 import com.example.email.KitchenTipBroadcast;
 import com.example.email.TemplateMarker;
@@ -31,6 +32,7 @@ public class QuartzContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		
 		context = sce.getServletContext();
+		
 		JobDetail databaseUpdate = JobBuilder.newJob(DatabaseUpdate.class)
 				.withIdentity("DatabaseUpdate").build();
 		CronTrigger updateTrigger = TriggerBuilder.newTrigger()
@@ -50,6 +52,7 @@ public class QuartzContextListener implements ServletContextListener {
 
 		JobDetail weekEndBroadcast = JobBuilder.newJob(WeekEndBroadcast.class)
 				.withIdentity("WeekEndBroadcast").build();
+		
 		CronTrigger weekEndTrigger = TriggerBuilder
 				.newTrigger()
 				.withIdentity("weekEndTrigger")
@@ -57,7 +60,7 @@ public class QuartzContextListener implements ServletContextListener {
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 30 15 ? * FRI"))
 				.forJob("WeekEndBroadcast").build();
-		
+			
 		SchedulerFactory weekEndFactory = new StdSchedulerFactory();
 		Scheduler weekEndSch;
 		try {
@@ -69,27 +72,6 @@ public class QuartzContextListener implements ServletContextListener {
 			errorLogger.error("An Error Occured:", ex);
 		}
 
-		/*JobDetail weekStartBroadcast = JobBuilder
-				.newJob(WeekStartBroadcast.class)
-				.withIdentity("WeekStartBroadcast").build();
-		CronTrigger weekStartTrigger = TriggerBuilder
-				.newTrigger()
-				.withIdentity("weekStartTrigger")
-				.startNow()
-				.withSchedule(
-						CronScheduleBuilder.cronSchedule("0 0 14 ? * MON"))
-				.forJob("WeekStartBroadcast").build();
-		SchedulerFactory weekStartFactory = new StdSchedulerFactory();
-		Scheduler weekStartSch;
-		try {
-			weekStartSch = schFactory.getScheduler();
-			weekStartSch.start();
-			weekStartSch.scheduleJob(weekStartBroadcast, weekStartTrigger);
-		} catch (SchedulerException ex) {
-			ex.printStackTrace();
-			errorLogger.error("An Error Occured:", ex);
-		}*/
-
 		JobDetail kitchenTipBroadcast = JobBuilder
 				.newJob(KitchenTipBroadcast.class)
 				.withIdentity("KitchenTipBroadcast").build();
@@ -100,8 +82,7 @@ public class QuartzContextListener implements ServletContextListener {
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 0 9 ? * 4#3"))
 				.forJob("KitchenTipBroadcast").build();
-		
-		
+
 		SchedulerFactory kitchenTipFactory = new StdSchedulerFactory();
 		Scheduler kitcheTipSch;
 		try {
@@ -123,6 +104,7 @@ public class QuartzContextListener implements ServletContextListener {
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 0 9 ? * 2#1"))
 				.forJob("GeneralTipBroadcast").build();
+
 		SchedulerFactory generalTipFactory = new StdSchedulerFactory();
 		Scheduler generalTipSch;
 		try {

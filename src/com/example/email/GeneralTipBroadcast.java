@@ -24,7 +24,6 @@ public class GeneralTipBroadcast implements Job {
 		//JobDataMap dataMap = jobContext.getJobDetail().getJobDataMap();
 		//context = (ServletContext) dataMap.get("context");
 		int projectStage = ProgramPreferences.getProjectStage(QuartzContextListener.context);
-		System.out.println(projectStage);
 		if(projectStage ==2 || projectStage ==3){
 			EmailManagement.sendEmployeeTipEmail();}
 		
