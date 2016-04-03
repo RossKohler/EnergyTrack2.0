@@ -51,6 +51,8 @@ public class EnergyTipLayout extends VerticalLayout {
 		energyTipTable.addGeneratedColumn("ENABLED",new BooleanColumnGenerator("ENABLED", true, null) );
 		energyTipTable.setSelectable(true);
 		energyTipTable.setMultiSelect(true);
+		energyTipTable.setColumnHeader("SAVINGS_TIP", "ENERGY SAVINGS TIPS");
+		energyTipTable.setColumnExpandRatio("SAVINGS_TIP", 0.20f);
 		energyTipTable.setSizeFull();
 		mainLayout.addComponent(energyTipTable);
 		mainLayout.setExpandRatio(energyTipTable, 1.0f);

@@ -1,7 +1,7 @@
 ﻿﻿<body bgcolor="#C5E0B3">
 
 <p>
-    <img src="cid:winner_banner">
+    <img src="cid:winner_banner" height="100" width="800">
 </p>
 
 <p>Dear ${name},</p>
@@ -27,7 +27,7 @@
 <p>The 2Wise2Waste Electricity Savings Project</p>
 
 <p>
-    <img src="cid:wcglogo">
+    <img src="cid:wcglogo" width = "800">
 </p>
 
 </body>

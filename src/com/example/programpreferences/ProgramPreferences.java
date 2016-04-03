@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 
 import com.example.energytrack2_0.Log4jContextListener;
+import com.example.energytrack2_0.QuartzContextListener;
 import com.vaadin.server.VaadinService;
 
 
@@ -18,19 +19,17 @@ import com.vaadin.server.VaadinService;
 public class ProgramPreferences{
 	
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
-	private static FileInputStream input;
-	private static Properties prop;
 	private static String url = "/WEB-INF/Resources/config.properties";
 	
-	public static void openProperties(){
-		
-		prop = new Properties();
+	public static Properties openProperties(){
+		Properties prop = new Properties();
 		try {
 			
 			String basepath = VaadinService.getCurrent()
 	                  .getBaseDirectory().getAbsolutePath();
-			input = new FileInputStream(basepath+url);
+			FileInputStream input = new FileInputStream(basepath+url);
 			prop.load(input);
+			input.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			errorLogger.error("Error in ProgramPreferences",e);
@@ -46,13 +45,16 @@ public class ProgramPreferences{
 			e.printStackTrace();
 			
 		}
+		return prop;
 	
 		}
 	
-	public static void openProperties(ServletContext context){
-	try{
-		input = new FileInputStream(context.getRealPath(url));
+	public static Properties openProperties(ServletContext context){
+		Properties prop = new Properties();
+		try{
+		FileInputStream input = new FileInputStream(context.getRealPath(url));
 		prop.load(input);
+		input.close();
 	} catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
 		errorLogger.error("Error in ProgramPreferences",e);
@@ -68,183 +70,142 @@ public class ProgramPreferences{
 		e.printStackTrace();
 		
 	}
-		
-		
+		return prop;
 	}
-	
-	public static void closeProperties(){
-		if(input != null){
-			try{
-				input.close();
-			}
-			catch(IOException e){
-				errorLogger.error("Error in ProgramPreferences",e);
-				e.printStackTrace();
-				
-			}
-			catch(Exception e){
-				errorLogger.error("Error in ProgramPreferences",e);
-				e.printStackTrace();
-				
-			}
-		}
-			
-			
-		}
+
 	
 	
 	public static String getDBUser(){
-		openProperties();
-		String dbUser = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String dbUser = "";
+		if(prop!= null){
 			dbUser=prop.getProperty("dbUser");
 		
 		}
-		closeProperties();
 		return dbUser;
 		}
 	
 	
 	public static String getDBURL(){
-		openProperties();
-		String dbURL = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String dbURL = "";
+		if(prop!= null){
 			dbURL=prop.getProperty("dbURL");
-			
-			
 		}
-		closeProperties();
 		return dbURL;
 		}
 	
 	public static String getDBPass(){
-		openProperties();
-		String dbPass = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String dbPass = "";
+		if(prop!= null){
 			dbPass=prop.getProperty("dbPass");
-		
 		}
-		closeProperties();
 		return dbPass;
 		}
 	
 	public static String getEmailAddress(){
-		openProperties();
-		String emailAddress = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String emailAddress = "";
+		if(prop!= null){
 			emailAddress=prop.getProperty("emailAddress");
-		
 		}
-		closeProperties();
 		return emailAddress;
 		}
 	
 	public static String getEmailAddress(ServletContext context){
-		openProperties(context);
+		Properties prop = openProperties(context);
 		String emailAddress = null;
-		if(prop!= null && input != null){
+		if(prop!= null){
 			emailAddress=prop.getProperty("emailAddress");
-		
 		}
-		closeProperties();
 		return emailAddress;
 		}
 	
 	public static String getEmailUser(){
-		openProperties();
-		String emailUser = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String emailUser = "";
+		if(prop!= null){
 			emailUser=prop.getProperty("emailUser");
 		
 		}
-		closeProperties();
 		return emailUser;
 		}
 	
 	public static String getEmailUser(ServletContext context){
-		openProperties(context);
-		String emailUser = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties(context);
+		String emailUser = "";
+		if(prop!= null){
 			emailUser=prop.getProperty("emailUser");
-		
 		}
-		closeProperties();
 		return emailUser;
 		}
 	
 	public static String getEmailPass(){
-		openProperties();
-		String emailPass = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();;
+		String emailPass = "";
+		if(prop!= null){
 			emailPass=prop.getProperty("emailPass");
 		
 		}
-		closeProperties();
 		return emailPass;
 		}
 	
 	public static String getEmailPass(ServletContext context){
-		openProperties(context);
-		String emailPass = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties(context);
+		String emailPass = "";
+		if(prop!= null){
 			emailPass=prop.getProperty("emailPass");
 		
 		}
-		closeProperties();
 		return emailPass;
 		}
 	
 	
 	public static String getHost(){
-		openProperties();
-		String hostname = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String hostname = "";
+		if(prop!= null){
 			hostname=prop.getProperty("emailHost");
 		
 		}
-		closeProperties();
 		return hostname;
 		}
 	
 	public static String getHost(ServletContext context){
-		openProperties(context);
-		String hostname = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties(context);
+		String hostname = "";
+		if(prop!= null){
 			hostname=prop.getProperty("emailHost");
-		
 		}
-		closeProperties();
 		return hostname;
 		}
 	
 	public static String getPort(){
-		openProperties();
-		String port = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties();
+		String port = "";
+		if(prop!= null){
 			port =prop.getProperty("emailPort");
 		
 		}
-		closeProperties();
 		return port;
 		}
 	
 	public static String getPort(ServletContext context){
-		openProperties(context);
-		String port = null;
-		if(prop!= null && input != null){
+		Properties prop = openProperties(context);
+		String port = "";
+		if(prop!= null){
 			port =prop.getProperty("emailPort");
-		
 		}
-		closeProperties();
 		return port;
 		}
 	
 	public static void setProjectStage(int projectStage){
 		FileOutputStream output=null;
 		try {
-			if(prop == null){
-				prop = new Properties();
-			}
+			
+			Properties prop =  openProperties(QuartzContextListener.context);
+		
 			String basepath = VaadinService.getCurrent()
 	                  .getBaseDirectory().getAbsolutePath();
 			output = new FileOutputStream(basepath+url);
@@ -270,23 +231,21 @@ public class ProgramPreferences{
 	}}
 	
 	public static int getProjectStage(){
-		openProperties();
+		Properties prop = openProperties();
 		int projectStage=0;
-		if(prop!= null && input != null){
+		if(prop!= null){
 			projectStage = Integer.parseInt(prop.getProperty("projectStage"));
 		}
-		closeProperties();
 		return projectStage;
 		}
 		
 		
 	public static int getProjectStage(ServletContext context){
-		openProperties(context);
+		Properties prop = openProperties(context);
 		int projectStage=0;
-		if(prop!= null && input != null){
+		if(prop!= null){
 			projectStage = Integer.parseInt(prop.getProperty("projectStage"));
 		}
-		closeProperties();
 		return projectStage;
 	}
 	

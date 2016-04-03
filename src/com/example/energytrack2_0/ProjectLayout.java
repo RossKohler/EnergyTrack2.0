@@ -122,8 +122,6 @@ public class ProjectLayout extends VerticalLayout{
 		projectStageLayout.addComponent(buttonLayout);
 		projectStage.setContent(projectStageLayout);
 		this.addComponent(projectStage);
-		
-		Panel projectTablePanel = new Panel();
 		VerticalLayout projectTableLayout = new VerticalLayout();
 		
 		introLayout = new HorizontalLayout();
@@ -203,7 +201,7 @@ public class ProjectLayout extends VerticalLayout{
 		floorTable.setColumnHeaders(new String[]{"Floor #","Treatment Group","Energy Advocate","No. Employees","Floor Rank"});
 		floorTable.setSelectable(true);
 		floorTable.setMultiSelect(true);
-		floorTable.setSizeUndefined();
+		floorTable.setWidth("100%");
 	
 		
 		projectTableLayout.addComponent(floorTable);
@@ -229,13 +227,11 @@ public class ProjectLayout extends VerticalLayout{
 		
 		
 		projectTableLayout.addComponent(editGroupButton);
-		projectTableLayout.setSizeFull();
 		projectTableLayout.setSpacing(true);
-		projectTablePanel.setContent(projectTableLayout);
+
 		
 		
-		this.addComponent(projectTablePanel);
-		this.setExpandRatio(projectTablePanel, 1);
+		this.addComponent(projectTableLayout);
 		
 		
 		

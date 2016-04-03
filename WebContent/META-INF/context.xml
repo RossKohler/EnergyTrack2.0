@@ -8,6 +8,7 @@
     driverClassName="org.firebirdsql.jdbc.FBDriver"
     url="jdbc:firebirdsql://localhost:3050//home/rosskohler/Databases/PANELTRACK.FDB"
     validationQuery="select 1 from rdb$database"
-
+    removeAbandoned="true"
+    maxActive="100"
     />
 </Context>

@@ -15,11 +15,14 @@ import org.quartz.SchedulerFactory;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.example.database.DatabaseConnection;
 import com.example.database.DatabaseQuery;
 import com.example.database.DatabaseUpdate;
 import com.example.email.EmailManagement;
 import com.example.email.GeneralTipBroadcast;
+import com.example.email.GeneralTipBroadcastGroupB;
 import com.example.email.KitchenTipBroadcast;
+import com.example.email.KitchenTipBroadcastGroupB;
 import com.example.email.TemplateMarker;
 import com.example.email.WeekEndBroadcast;
 import com.example.email.WeekStartBroadcast;
@@ -28,23 +31,53 @@ import com.example.programpreferences.ProgramPreferences;
 public class QuartzContextListener implements ServletContextListener {
 	Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
 	public static ServletContext context;
+	Scheduler sch;
+	Scheduler weekEndSch;
+	Scheduler kitchenTipSch;
+	Scheduler generalTipSch;
+	Scheduler weekStartSch;
+	Scheduler generalTipSchGroupB;
+	Scheduler kitchenTipSchGroupB;
+	
+	
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		
 		context = sce.getServletContext();
-		
-		JobDetail databaseUpdate = JobBuilder.newJob(DatabaseUpdate.class)
+		DatabaseConnection.createConnectionPool();	
+		/*JobDetail databaseUpdate = JobBuilder.newJob(DatabaseUpdate.class)
 				.withIdentity("DatabaseUpdate").build();
 		CronTrigger updateTrigger = TriggerBuilder.newTrigger()
 				.withIdentity("updateTrigger").startNow()
 				.withSchedule(CronScheduleBuilder.cronSchedule("0 35 * * * ?"))
 				.forJob("DatabaseUpdate").build();
 		SchedulerFactory databaseFactory = new StdSchedulerFactory();
-		Scheduler sch;
 		try {
 			sch = databaseFactory.getScheduler();
 			sch.start();
 			sch.scheduleJob(databaseUpdate, updateTrigger);
+		} catch (SchedulerException ex) {
+			ex.printStackTrace();
+			errorLogger.error("An Error Occured:", ex);
+		}*/
+		
+		JobDetail weekStartBroadcast = JobBuilder.newJob(WeekStartBroadcast.class)
+				.withIdentity("WeekStartBroadcast").build();
+		
+		CronTrigger weekStartTrigger = TriggerBuilder
+				.newTrigger()
+				.withIdentity("weekStartTrigger")
+				.startNow()
+				.withSchedule(
+						CronScheduleBuilder.cronSchedule("0 0 10 ? * MON"))
+		
+				.forJob("WeekStartBroadcast").build();
+		
+		SchedulerFactory weekStartFactory = new StdSchedulerFactory();
+		try {
+			weekStartSch = weekStartFactory.getScheduler();
+			weekStartSch.start();
+			weekStartSch.scheduleJob(weekStartBroadcast, weekStartTrigger);
 		} catch (SchedulerException ex) {
 			ex.printStackTrace();
 			errorLogger.error("An Error Occured:", ex);
@@ -59,10 +92,10 @@ public class QuartzContextListener implements ServletContextListener {
 				.startNow()
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 30 15 ? * FRI"))
+		
 				.forJob("WeekEndBroadcast").build();
-			
+		
 		SchedulerFactory weekEndFactory = new StdSchedulerFactory();
-		Scheduler weekEndSch;
 		try {
 			weekEndSch = weekEndFactory.getScheduler();
 			weekEndSch.start();
@@ -72,6 +105,29 @@ public class QuartzContextListener implements ServletContextListener {
 			errorLogger.error("An Error Occured:", ex);
 		}
 
+		JobDetail kitchenTipBroadcastGroupB = JobBuilder
+				.newJob(KitchenTipBroadcastGroupB.class)
+				.withIdentity("KitchenTipBroadcastGroupB").build();
+		CronTrigger kitchenTipTriggerGroupB = TriggerBuilder
+				.newTrigger()
+				.withIdentity("KitchenTipBroadcastGroupB")
+				.startNow()
+				.withSchedule(
+						CronScheduleBuilder.cronSchedule("0 0 9 ? * 3#2"))
+				
+				
+				.forJob("KitchenTipBroadcastGroupB").build();
+
+		SchedulerFactory kitchenTipFactoryGroupB = new StdSchedulerFactory();
+		try {
+			kitchenTipSchGroupB = kitchenTipFactoryGroupB.getScheduler();
+			kitchenTipSchGroupB.start();
+			kitchenTipSchGroupB.scheduleJob(kitchenTipBroadcastGroupB, kitchenTipTriggerGroupB);
+		} catch (SchedulerException ex) {
+			ex.printStackTrace();
+			errorLogger.error("An Error Occured:", ex);
+		}
+		
 		JobDetail kitchenTipBroadcast = JobBuilder
 				.newJob(KitchenTipBroadcast.class)
 				.withIdentity("KitchenTipBroadcast").build();
@@ -81,18 +137,20 @@ public class QuartzContextListener implements ServletContextListener {
 				.startNow()
 				.withSchedule(
 						CronScheduleBuilder.cronSchedule("0 0 9 ? * 4#3"))
+				
+				
 				.forJob("KitchenTipBroadcast").build();
 
 		SchedulerFactory kitchenTipFactory = new StdSchedulerFactory();
-		Scheduler kitcheTipSch;
 		try {
-			kitcheTipSch = kitchenTipFactory.getScheduler();
-			kitcheTipSch.start();
-			kitcheTipSch.scheduleJob(kitchenTipBroadcast, kitchenTipTrigger);
+			kitchenTipSch = kitchenTipFactory.getScheduler();
+			kitchenTipSch.start();
+			kitchenTipSch.scheduleJob(kitchenTipBroadcast, kitchenTipTrigger);
 		} catch (SchedulerException ex) {
 			ex.printStackTrace();
 			errorLogger.error("An Error Occured:", ex);
 		}
+		
 		
 		JobDetail generalTipBroadcast = JobBuilder
 				.newJob(GeneralTipBroadcast.class)
@@ -102,15 +160,35 @@ public class QuartzContextListener implements ServletContextListener {
 				.withIdentity("GeneralTipBroadcast")
 				.startNow()
 				.withSchedule(
-						CronScheduleBuilder.cronSchedule("0 0 9 ? * 2#1"))
+						CronScheduleBuilder.cronSchedule("0 0 9 ? * 3#1"))
 				.forJob("GeneralTipBroadcast").build();
 
 		SchedulerFactory generalTipFactory = new StdSchedulerFactory();
-		Scheduler generalTipSch;
 		try {
 			generalTipSch = generalTipFactory.getScheduler();
 			generalTipSch.start();
 			generalTipSch.scheduleJob(generalTipBroadcast, generalTipTrigger);
+		} catch (SchedulerException ex) {
+			ex.printStackTrace();
+			errorLogger.error("An Error Occured:", ex);
+		}
+		
+		JobDetail generalTipBroadcastGroupB = JobBuilder
+				.newJob(GeneralTipBroadcastGroupB.class)
+				.withIdentity("GeneralTipBroadcastGroupB").build();
+		CronTrigger generalTipTriggerGroupB = TriggerBuilder
+				.newTrigger()
+				.withIdentity("GeneralTipBroadcastGroupB")
+				.startNow()
+				.withSchedule(
+						CronScheduleBuilder.cronSchedule("0 0 9 ? * 4#1"))
+				.forJob("GeneralTipBroadcastGroupB").build();
+
+		SchedulerFactory generalTipFactoryGroupB = new StdSchedulerFactory();
+		try {
+			generalTipSchGroupB = generalTipFactoryGroupB.getScheduler();
+			generalTipSchGroupB.start();
+			generalTipSchGroupB.scheduleJob(generalTipBroadcastGroupB, generalTipTriggerGroupB);
 		} catch (SchedulerException ex) {
 			ex.printStackTrace();
 			errorLogger.error("An Error Occured:", ex);
@@ -121,7 +199,19 @@ public class QuartzContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
+		try {
+			weekStartSch.shutdown();
+			generalTipSch.shutdown();
+			kitchenTipSch.shutdown();
+			weekEndSch.shutdown();
+			sch.shutdown();
+			sce = null;
+		} catch (SchedulerException e) {
+			// TODO Auto-generated catch block
+			errorLogger.error(e);
+			e.printStackTrace();
+		}
+		
 
 	}
 

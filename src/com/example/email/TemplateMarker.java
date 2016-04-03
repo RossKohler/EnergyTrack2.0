@@ -526,12 +526,65 @@ public static Vector<Employee> setEnergyAdvocateEmail(){
 
 
 
-public static Vector<Employee> setEmployeeTipEmail(){
+public static Vector<Employee> setEmployeeTipEmailGroupA(){
 	initConfiguration();
 	Writer out = null;
 	Vector<Employee> groupEmployees = new Vector<Employee>();
 	
-	groupEmployees = DatabaseQuery.getGroupEmployees();
+	groupEmployees = DatabaseQuery.getGroupAEmployees();
+	Map<String, Object> input = new HashMap<String, Object>();
+	
+	Vector<String> energyTips = DatabaseQuery.getThreeRandomTips("Employee");
+	Iterator<String> tipIterator = energyTips.iterator();
+	
+	Iterator<Employee> employeeIterator = groupEmployees.iterator();
+	int count = 1;
+	String energyTipString = "<b>";
+	while(tipIterator.hasNext()){
+		energyTipString += count+". "+tipIterator.next();
+		if(tipIterator.hasNext()){
+			energyTipString+="<br />";
+		}
+		count++;
+	}
+		energyTipString += "</b>";
+		input.put("energyTips",energyTipString);
+		
+	while(employeeIterator.hasNext()){
+		Employee employee = employeeIterator.next();
+		input.put("name", employee.getName());
+		 Template template = null;
+			try {
+				template = cfg.getTemplate("EnergyTips(phase1).ftl");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				errorLogger.error("Error in TemplateMarker",e);
+				e.printStackTrace();
+			}
+			 out = new StringWriter();
+			 try {
+				template.process(input,out);
+			} catch (TemplateException e) {
+				// TODO Auto-generated catch block
+				errorLogger.error("Error in TemplateMarker",e);
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				errorLogger.error("Error in TemplateMarker",e);
+				e.printStackTrace();
+			}
+			 employee.setPersonalisedMessage(out.toString());}
+		 return groupEmployees;
+		
+		
+	}
+
+public static Vector<Employee> setEmployeeTipEmailGroupB(){
+	initConfiguration();
+	Writer out = null;
+	Vector<Employee> groupEmployees = new Vector<Employee>();
+	
+	groupEmployees = DatabaseQuery.getGroupBEmployees();
 	Map<String, Object> input = new HashMap<String, Object>();
 	
 	Vector<String> energyTips = DatabaseQuery.getThreeRandomTips("Employee");
@@ -611,10 +664,40 @@ public static Vector<Employee> setAfternoonReminder(){
 	
 }
 
-public static Vector<Employee> setKitchenTipEmail(){
+public static Vector<Employee> setKitchenTipEmailGroupA(){
 	initConfiguration();
 	Writer out = null;
-	Vector<Employee> groupEmployees = DatabaseQuery.getGroupEmployees();
+	Vector<Employee> groupEmployees = DatabaseQuery.getGroupAEmployees();
+	Iterator<Employee> employeeIterator = groupEmployees.iterator();
+	while(employeeIterator.hasNext()){
+		Employee employee = employeeIterator.next();
+		 Map<String, Object> input = new HashMap<String, Object>();
+		 input.put("name", employee.getName());
+		try {
+		Template template = cfg.getTemplate("KitchenTips.ftl");
+		out = new StringWriter();
+		
+		template.process(input, out);
+		employee.setPersonalisedMessage(out.toString());
+	
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		errorLogger.error("Error in TemplateMarker",e);
+		e.printStackTrace();
+	} catch (TemplateException e) {
+		// TODO Auto-generated catch block
+		errorLogger.error("Error in TemplateMarker",e);
+		e.printStackTrace();
+	}
+	}
+	return groupEmployees;
+	
+}
+
+public static Vector<Employee> setKitchenTipEmailGroupB(){
+	initConfiguration();
+	Writer out = null;
+	Vector<Employee> groupEmployees = DatabaseQuery.getGroupBEmployees();
 	Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
 		Employee employee = employeeIterator.next();

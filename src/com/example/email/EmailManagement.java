@@ -112,6 +112,7 @@ public static void sendStageOneIntroEmail(){
 	MailListener listener = null;
 	Transport transport = null;
 	Message message = null;
+	int errorCount = 0;
 	
 	try {
 		transport = getMailSession().getTransport("smtp");
@@ -158,16 +159,25 @@ public static void sendStageOneIntroEmail(){
 				}
 				transport.sendMessage(message,message.getAllRecipients());
 			}
-			catch(SMTPSendFailedException e){
-				if(transport.isConnected()==false){
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
 					try {
+						transport.close();
+						Thread.sleep(10000);
+						
 						transport.connect(username,password);
 						transport.sendMessage(message,message.getAllRecipients());
-					} catch (MessagingException e1) {
+					} catch (Exception e1) {
 						e.printStackTrace();
-						errorLogger.error(e);
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
 					}
-					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
 			}
 		
 		
@@ -188,6 +198,7 @@ public static void sendStageOneIntroEmail(){
 public static void sendStageTwoIntroEmailA(){
 	System.out.println("Sending project introduction emails (Stage 2-Group A)...");
 	errorLogger.info("Sending project introduction emails (Stage 2-Group A)...");
+	int errorCount = 0;
 	try {
 		Transport transport = getMailSession().getTransport("smtp");
 		MailListener listener = new MailListener();
@@ -197,6 +208,7 @@ public static void sendStageTwoIntroEmailA(){
 		message.setFrom(new InternetAddress(emailAddress));
 		Vector<Employee> groupEmployees = TemplateMarker.setStageTwoIntroMessageA();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
+		listener.totalEmails=groupEmployees.size();
 	while(employeeIterator.hasNext()){
 			
 			Employee employee = employeeIterator.next();
@@ -223,7 +235,32 @@ public static void sendStageTwoIntroEmailA(){
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		
 		
 		}
@@ -241,6 +278,7 @@ public static void sendStageTwoIntroEmailA(){
 }
 
 public static void sendStageTwoIntroEmailB(){
+	int errorCount = 0;
 	System.out.println("Sending project introduction emails (Stage 2-Group B)...");
 	errorLogger.info("Sending project introduction emails (Stage 2-Group B)...");
 	try {
@@ -279,7 +317,32 @@ public static void sendStageTwoIntroEmailB(){
 			message.setSubject("The Second Phase of the 2Wise2Waste Electricity Savings Project Begins Next Week");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		
 		
 		}
@@ -299,6 +362,7 @@ public static void sendStageTwoIntroEmailB(){
 
 public static void sendAfternoonReminder(){
 	System.out.println("Sending Afternoon Reminders...");
+	int errorCount = 0;
 	try {
 		Transport transport = getMailSession().getTransport("smtp");
 		MailListener listener = new MailListener();
@@ -341,16 +405,25 @@ public static void sendAfternoonReminder(){
 				}
 				transport.sendMessage(message,message.getAllRecipients());
 			}
-			catch(SMTPSendFailedException e){
-				if(transport.isConnected()==false){
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
 					try {
+						transport.close();
+						Thread.sleep(10000);
+						
 						transport.connect(username,password);
 						transport.sendMessage(message,message.getAllRecipients());
-					} catch (MessagingException e1) {
+					} catch (Exception e1) {
 						e.printStackTrace();
-						errorLogger.error(e);
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
 					}
-					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
 			}
 		
 		
@@ -369,9 +442,10 @@ public static void sendAfternoonReminder(){
 	
 }
 
-public static void sendEmployeeTipEmail(){
-	System.out.println("Sending energy tip emails...");
-	errorLogger.info("Sending energy tip emails...");
+public static void sendEmployeeTipEmailGroupA(){
+	System.out.println("Sending energy tip emails to Group A...");
+	errorLogger.info("Sending energy tip emails to Group A...");
+	int errorCount=0;
 	try {
 		Transport transport = getMailSession().getTransport("smtp");
 		MailListener listener = new MailListener();
@@ -379,7 +453,7 @@ public static void sendEmployeeTipEmail(){
 		transport.connect(username,password);
 		Message message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
-		Vector<Employee> groupEmployees = TemplateMarker.setEmployeeTipEmail();
+		Vector<Employee> groupEmployees = TemplateMarker.setEmployeeTipEmailGroupA();
 		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 	while(employeeIterator.hasNext()){
@@ -414,24 +488,117 @@ public static void sendEmployeeTipEmail(){
 				}
 				transport.sendMessage(message,message.getAllRecipients());
 			}
-			catch(SMTPSendFailedException e){
-				if(transport.isConnected()==false){
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
 					try {
+						transport.close();
+						Thread.sleep(100000);
+						
 						transport.connect(username,password);
 						transport.sendMessage(message,message.getAllRecipients());
-					} catch (MessagingException e1) {
+					} catch (Exception e1) {
 						e.printStackTrace();
-						errorLogger.error(e);
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
 					}
-					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
 			}
 		
 		
 		}
 	transport.close();
 	transport.removeTransportListener(listener);
-	System.out.println("All energy tip emails have been sent..");
-	errorLogger.info("All energy tip emails have been sent..");
+	System.out.println("All energy tip emails have been sent to Group A..");
+	errorLogger.info("All energy tip emails have been sent to Group A..");
+		
+		
+	}catch(Exception e){
+		e.printStackTrace();
+		System.out.println("ERROR (OPERATION NOT COMPLETE)");
+		errorLogger.error(e);	
+	}
+	
+	
+}
+
+public static void sendEmployeeTipEmailGroupB(){
+	System.out.println("Sending energy tip emails to Group B...");
+	errorLogger.info("Sending energy tip emails to Group B...");
+	int errorCount=0;
+	try {
+		Transport transport = getMailSession().getTransport("smtp");
+		MailListener listener = new MailListener();
+		transport.addTransportListener(listener);
+		transport.connect(username,password);
+		Message message = new MimeMessage(getMailSession());
+		message.setFrom(new InternetAddress(emailAddress));
+		Vector<Employee> groupEmployees = TemplateMarker.setEmployeeTipEmailGroupB();
+		listener.totalEmails=groupEmployees.size();
+		Iterator<Employee> employeeIterator = groupEmployees.iterator();
+	while(employeeIterator.hasNext()){
+			
+			Employee employee = employeeIterator.next();
+			if(isValidEmailAddress(employee.getEmail())){
+				message.setRecipient(Message.RecipientType.CC,new InternetAddress(employee.getEmail()));
+			}
+			else{
+				continue;
+			}
+			Multipart multipart = new MimeMultipart("related");
+			BodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
+			multipart.addBodyPart(htmlPart);
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"tips_banner.png")));
+			bannerPart.setHeader("Content-ID","<tips_banner>");
+			multipart.addBodyPart(bannerPart);
+			
+			message.setSubject("How to save electricity on your floor");
+			message.setContent(multipart);
+			message.saveChanges();
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(100000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
+		
+		
+		}
+	transport.close();
+	transport.removeTransportListener(listener);
+	System.out.println("All energy tip emails have been sent to Group B..");
+	errorLogger.info("All energy tip emails have been sent to Group B..");
 		
 		
 	}catch(Exception e){
@@ -446,6 +613,7 @@ public static void sendEmployeeTipEmail(){
 
 
 public static void energyAdvocateEmail(){
+	int errorCount = 0;
 	try{
 		System.out.println("Sending emails notifying energy advocates of their role..");
 		errorLogger.info("Sending emails notifying energy advocates of their role..");
@@ -456,6 +624,7 @@ public static void energyAdvocateEmail(){
 		
 		Transport transport = getMailSession().getTransport("smtp");
 		MailListener listener = new MailListener();
+		listener.totalEmails=groupEmployees.size();
 		transport.addTransportListener(listener);
 		transport.connect(username,password);
 		
@@ -482,10 +651,35 @@ public static void energyAdvocateEmail(){
 			bannerPart.setHeader("Content-ID","<intro1_banner>");
 			multipart.addBodyPart(bannerPart);
 			
-			message.setSubject("You are this week's Energy Savings Advocate!");
+			message.setSubject("You are this weeks Energy Savings Advocate");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		
 		}
 		System.out.println("Emails notifying energy advocates of their role have been sent.");
@@ -507,6 +701,7 @@ public static void energyAdvocateEmail(){
 }
 
 public static void sendAdvocateNotiEmail(){
+	int errorCount = 0;
 	try{
 		System.out.println("Sending emails notifying employees of new advocates...");
 		errorLogger.info("Sending emails notifying employees of new advocates...");
@@ -516,9 +711,11 @@ public static void sendAdvocateNotiEmail(){
 		Transport transport = getMailSession().getTransport("smtp");
 		MailListener listener = new MailListener();
 		transport.addTransportListener(listener);
+		
 		transport.connect(username,password);
 		
 		Vector<Employee> groupEmployees = TemplateMarker.setAdvocateNotiEmail();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 		while(employeeIterator.hasNext()){
 			Employee employee = employeeIterator.next();
@@ -543,10 +740,35 @@ public static void sendAdvocateNotiEmail(){
 			bannerPart.setHeader("Content-ID","<intro1_banner>");
 			multipart.addBodyPart(bannerPart);;
 			
-			message.setSubject("Your Energy Savings Advocate this week is�");
+			message.setSubject("Your Energy Savings Advocate this week is");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		}
 		transport.close();
 		transport.removeTransportListener(listener);
@@ -566,6 +788,7 @@ errorLogger.info("Emails notifying employees of new advocates have been sent");
 }
 
 public static void sendCompetitionNoAdvocateEmail(){
+	int errorCount = 0;
 	try{
 		System.out.println("Sending interfloor competition emails to group A...");
 		errorLogger.info("Sending interfloor competition emails to group A...");
@@ -578,6 +801,7 @@ public static void sendCompetitionNoAdvocateEmail(){
 		transport.connect(username,password);
 		
 		Vector<Employee> groupEmployees = TemplateMarker.setCompetitionNoAdvocateEmail();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 		while(employeeIterator.hasNext()){
 			Employee employee = employeeIterator.next();
@@ -602,10 +826,35 @@ public static void sendCompetitionNoAdvocateEmail(){
 			bannerPart.setHeader("Content-ID","<intro1_banner>");
 			multipart.addBodyPart(bannerPart);
 			
-			message.setSubject("See who won last week�s Electricity Savings Competition! How did your floor do?");
+			message.setSubject("See who won last weeks Electricity Savings Competition! How did your floor do?");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		}
 		transport.close();
 		transport.removeTransportListener(listener);
@@ -625,6 +874,7 @@ errorLogger.info("Interfloor competition emails to group A have been sent.");
 }
 
 public static void sendCompetitionAdvocateEmail(){
+	int errorCount = 0;
 	try{
 		System.out.println("Sending interfloor competition emails to group B...");
 		errorLogger.info("Sending interfloor competition emails to group B...");
@@ -637,6 +887,7 @@ public static void sendCompetitionAdvocateEmail(){
 		transport.connect(username,password);
 		
 		Vector<Employee> groupEmployees = TemplateMarker.setCompetitionAdvocateEmail();
+		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 		while(employeeIterator.hasNext()){
 			Employee employee = employeeIterator.next();
@@ -661,10 +912,35 @@ public static void sendCompetitionAdvocateEmail(){
 			bannerPart.setHeader("Content-ID","<intro1_banner>");
 			multipart.addBodyPart(bannerPart);
 			
-			message.setSubject("See who won last week's Electricity Savings Competition! How did your floor do?");
+			message.setSubject("See who won last weeks Electricity Savings Competition! How did your floor do?");
 			message.setContent(multipart);
 			message.saveChanges();
-			transport.sendMessage(message,message.getAllRecipients());
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
 		}
 		transport.close();
 		transport.removeTransportListener(listener);
@@ -683,10 +959,11 @@ System.out.println("Interfloor competition emails to group B have been sent.");
 errorLogger.info("Interfloor competition emails to group B have been sent.");
 }
 
-public static void sendKitchenTipEmail(){
+public static void sendKitchenTipEmailGroupA(){
+	int errorCount=0;
 	try{
-		System.out.println("Sending kitchen tip emails to Group A and Group B...");
-		errorLogger.info("Sending kitchen tip emails to Group A and Group B...");
+		System.out.println("Sending kitchen tip emails to Group A...");
+		errorLogger.info("Sending kitchen tip emails to Group A...");
 		Message message = new MimeMessage(getMailSession());
 		message.setFrom(new InternetAddress(emailAddress));
 		
@@ -695,7 +972,7 @@ public static void sendKitchenTipEmail(){
 		transport.addTransportListener(listener);
 		transport.connect(username,password);
 		
-		Vector<Employee> groupEmployees = TemplateMarker.setKitchenTipEmail();
+		Vector<Employee> groupEmployees = TemplateMarker.setKitchenTipEmailGroupA();
 		listener.totalEmails=groupEmployees.size();
 		Iterator<Employee> employeeIterator = groupEmployees.iterator();
 		while(employeeIterator.hasNext()){
@@ -722,7 +999,7 @@ public static void sendKitchenTipEmail(){
 			bannerPart.setHeader("Content-ID","<kitchen_banner>");
 			multipart.addBodyPart(bannerPart);
 			
-			message.setSubject("Reduce electricity use in the kitchen");
+			message.setSubject("Reduce electricity use in the kitchen" );
 			message.setContent(multipart);
 			message.saveChanges();
 			try{
@@ -731,22 +1008,29 @@ public static void sendKitchenTipEmail(){
 				}
 				transport.sendMessage(message,message.getAllRecipients());
 			}
-			catch(SMTPSendFailedException e){
-				if(transport.isConnected()==false){
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
 					try {
+						transport.close();
+						Thread.sleep(10000);
+						
 						transport.connect(username,password);
 						transport.sendMessage(message,message.getAllRecipients());
-					} catch (MessagingException e1) {
+					} catch (Exception e1) {
 						e.printStackTrace();
-						errorLogger.error(e);
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
 					}
-					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
 			}
-		}
 		transport.close();
 		transport.removeTransportListener(listener);
-		
-	}
+		}}
 	 catch (Exception e) {
 		 	System.out.println("ERROR (OPERATION NOT COMPLETE)");
 		 	errorLogger.error(e);
@@ -754,8 +1038,91 @@ public static void sendKitchenTipEmail(){
 		}
 	
 
-System.out.println("Kitchen tip emails have been sent.");
-errorLogger.info("Kitchen tip emails have been sent.");
+System.out.println("Kitchen tip emails have been sent to Group A.");
+errorLogger.info("Kitchen tip emails have been sent to Group A.");
+}
+
+public static void sendKitchenTipEmailGroupB(){
+	int errorCount=0;
+	try{
+		System.out.println("Sending kitchen tip emails to Group B...");
+		errorLogger.info("Sending kitchen tip emails to Group B...");
+		Message message = new MimeMessage(getMailSession());
+		message.setFrom(new InternetAddress(emailAddress));
+		
+		Transport transport = getMailSession().getTransport("smtp");
+		MailListener listener = new MailListener();
+		transport.addTransportListener(listener);
+		transport.connect(username,password);
+		
+		Vector<Employee> groupEmployees = TemplateMarker.setKitchenTipEmailGroupB();
+		listener.totalEmails=groupEmployees.size();
+		Iterator<Employee> employeeIterator = groupEmployees.iterator();
+		while(employeeIterator.hasNext()){
+			Employee employee = employeeIterator.next();
+			if(isValidEmailAddress(employee.getEmail())){
+				message.setRecipient(Message.RecipientType.CC,new InternetAddress(employee.getEmail()));
+			}
+			else{
+				continue;
+			}
+			
+			Multipart multipart = new MimeMultipart("related");
+			BodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent(employee.getPersonalisedMessage(),"text/html; charset=UTF-8");
+			multipart.addBodyPart(htmlPart);
+			
+			BodyPart wcgPart = new MimeBodyPart();
+			wcgPart.setDataHandler(new DataHandler(new FileDataSource(basepath+wcgImg)));
+			wcgPart.setHeader("Content-ID","<wcglogo>");
+			multipart.addBodyPart(wcgPart);
+			
+			BodyPart bannerPart = new MimeBodyPart();
+			bannerPart.setDataHandler(new DataHandler(new FileDataSource(basepath+"kitchen_banner.png")));
+			bannerPart.setHeader("Content-ID","<kitchen_banner>");
+			multipart.addBodyPart(bannerPart);
+			
+			message.setSubject("Reduce electricity use in the kitchen" );
+			message.setContent(multipart);
+			message.saveChanges();
+			try{
+				if(transport.isConnected()==false){
+					transport.connect(username,password);
+				}
+				transport.sendMessage(message,message.getAllRecipients());
+			}
+			catch(Exception e){
+				if(errorCount<=20){
+					errorLogger.error("There was a problem sending",e);
+					try {
+						transport.close();
+						Thread.sleep(10000);
+						
+						transport.connect(username,password);
+						transport.sendMessage(message,message.getAllRecipients());
+					} catch (Exception e1) {
+						e.printStackTrace();
+						errorLogger.error("Error occured attempting to connect to SMTP server",e1);
+					}
+					errorCount++;
+				}
+				else{
+					errorLogger.error("Sending emails has failed! Error count has reached threshold!");
+					return;
+				}
+			}
+		transport.close();
+		transport.removeTransportListener(listener);
+		}}
+	 catch (Exception e) {
+		 	System.out.println("ERROR (OPERATION NOT COMPLETE)");
+		 	errorLogger.error(e);
+		 	e.printStackTrace();
+		}
+	
+
+System.out.println("Kitchen tip emails have been sent to Group B.");
+errorLogger.info("Kitchen tip emails have been sent to Group B.");
 }
 
 

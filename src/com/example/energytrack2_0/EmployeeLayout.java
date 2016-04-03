@@ -53,11 +53,12 @@ public class EmployeeLayout extends VerticalLayout {
 			e.printStackTrace();
 		}
 		
-		
+		System.out.println("hello");
 		employeeTable.setContainerDataSource(container);
 		employeeTable.addGeneratedColumn("TREATMENT", new BooleanColumnGenerator("TREATMENT", true, null));
 		employeeTable.setSelectable(true);
 		employeeTable.setMultiSelect(true);
+		employeeTable.setColumnHeader("SAVINGS_TIP", "ENERGY SAVINGS TIP");
 		mainLayout.addComponent(employeeTable);
 		mainLayout.setExpandRatio(employeeTable, 1.0f);
 		mainLayout.setSpacing(true);
