@@ -6,7 +6,7 @@
 
 ﻿<p>Dear ${name},</p>
 
-<p>As we indicated to you at the start of Phase 1 of the 2Wise2Waste Electricity Savings Project, the Western Cape Government has committed to reducing the electricity usage in Provincial Buildings by 10% by 2015. We have a follow-up plan for  Phase 2 of this project and will be working together with you to achieve this goal</p>  
+<p>As we indicated to you at the start of Phase 1 of the 2Wise2Waste Electricity Savings Project, the Western Cape Government has committed to reducing the electricity usage in Provincial Buildings by 30% by 2017. We have a follow-up plan for  Phase 2 of this project and will be working together with you to achieve this goal</p>  
 
 <p>As you know, we have installed electricity meters in 4 Dorp Street that will track how much electricity each floor uses. But you and your colleagues are the only ones who can make those meters’ readings go down.</p>
 

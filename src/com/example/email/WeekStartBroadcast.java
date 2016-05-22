@@ -23,6 +23,12 @@ public class WeekStartBroadcast implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		int projectStage = ProgramPreferences.getProjectStage(QuartzContextListener.context);
 		if(projectStage==3){
+			   //DatabaseQuery.setCurrentUsage();
+			   //DatabaseQuery.set24hourUsage();
+		   	   //DatabaseQuery.setWeekUsage();
+		   	   //DatabaseQuery.setMonthUsage();
+		   	   //DatabaseQuery.setFloorRanks();
+		   	DatabaseQuery.setExcelWeekUsage();
 			EmailManagement.sendCompetitionNoAdvocateEmail();
 			EmailManagement.sendCompetitionAdvocateEmail();
 			DatabaseQuery.randomEnergyAdvocate();

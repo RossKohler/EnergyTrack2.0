@@ -69,7 +69,7 @@ public class QuartzContextListener implements ServletContextListener {
 				.withIdentity("weekStartTrigger")
 				.startNow()
 				.withSchedule(
-						CronScheduleBuilder.cronSchedule("0 0 10 ? * MON"))
+						CronScheduleBuilder.cronSchedule("0 30 10 ? * MON"))
 		
 				.forJob("WeekStartBroadcast").build();
 		

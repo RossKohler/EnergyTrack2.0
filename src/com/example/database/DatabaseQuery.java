@@ -1,5 +1,10 @@
 package com.example.database;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -12,7 +17,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -29,6 +36,10 @@ import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 import org.joda.time.DateTime;
@@ -43,12 +54,16 @@ import com.example.floor.FloorMap;
 import com.example.employee.Employee;
 import com.example.energytips.EnergyTip;
 import com.example.energytrack2_0.Log4jContextListener;
+import com.example.energytrack2_0.QuartzContextListener;
+import com.google.gwt.thirdparty.guava.common.collect.Lists;
 
 public class DatabaseQuery {
+	
+	private static String url = "/WEB-INF/Resources/PanelTrackCSV";
 	final static Logger errorLogger = Logger.getLogger(Log4jContextListener.class);
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.s");
-	
+	 public static DateTimeFormatter csvDateFormat= DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss a");
 
 	public static Vector<String> getTableNames() {
 		Connection conn = null;
@@ -516,6 +531,138 @@ public class DatabaseQuery {
 		}
 
 	}
+	public static void setExcelWeekUsage(){
+		String [] headerMapping = {"Date & Time","P Sum (kW)","Q Sum (kVAr)","S Sum (kVA)"};
+		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withHeader(headerMapping).withSkipHeaderRecord(true);
+		String basepath = QuartzContextListener.context.getRealPath(url);
+		File dir = new File(basepath);
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+		
+		PreparedStatement prepared = null;
+		Connection conn = null;
+		
+	for(int floor = 1; floor<=24;floor++){
+		boolean firstRun = true;
+		FileFilter fileFilter = new WildcardFileFilter("* West Sub SB"+Integer.toString(floor)+" *");
+		File[] files = dir.listFiles(fileFilter);
+		Arrays.sort(files,Collections.reverseOrder());
+		
+		DateTime weekFromCurrent = null;
+		DateTime twoWeeksFromCurrent = null;
+		
+		double weekConsumption = 0;
+		int weekCount = 0;
+		
+		double twoWeekConsumption = 0;
+		double twoWeekCount = 0;
+		
+		for(int i = 0; i< files.length;i++){
+			 CSVParser parser;
+			try {
+
+				parser = CSVParser.parse(files[i],csvFileFormat);
+				List<CSVRecord> csvRecords = parser.getRecords();
+				csvRecords = Lists.reverse(csvRecords);
+				 for (CSVRecord csvRecord : csvRecords) {
+					 String datetime = csvRecord.get("Date & Time");
+					 if(! (datetime.contains("AM")||datetime.contains("PM"))){
+						 datetime += " 00:00:00 AM";
+					 }
+					 DateTime date = csvDateFormat.parseDateTime(datetime);
+					
+					 if(firstRun==true && i ==0){
+						 weekFromCurrent = date.minusWeeks(1);
+
+						 twoWeeksFromCurrent = date.minusWeeks(2);	
+
+						 firstRun = false;
+					 }
+					 
+					 if(date.isAfter(weekFromCurrent)){
+						 weekConsumption += Double.parseDouble(csvRecord.get("P Sum (kW)"));
+						 weekCount++;
+					 }
+					 else if(date.isBefore(weekFromCurrent)&&date.isAfter(twoWeeksFromCurrent)){
+						 twoWeekConsumption += Double.parseDouble(csvRecord.get("P Sum (kW)"));
+						 twoWeekCount++;
+					 }
+				 }
+				 
+				 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		
+		double weekAverage = Math.abs(weekConsumption/weekCount);
+		double twoWeekAverage = Math.abs(twoWeekConsumption/twoWeekCount);
+		double weekChange = ((weekAverage - twoWeekAverage)/weekAverage)*100;
+		try {
+			conn = DatabaseConnection.ds
+					.getConnection();
+			String query = "UPDATE or INSERT into Building_Profile (floor,week_change) VALUES(?,?) MATCHING(floor)";
+			prepared = conn
+					.prepareStatement(query);
+			prepared.setInt(1, floor);
+			prepared.setDouble(2, weekChange);
+			prepared.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+		      if (conn != null) {
+		        try { conn.close(); } catch (SQLException e) { ; }
+		        conn = null;
+		      }
+		      if (prepared != null) {
+			        try { prepared.close(); } catch (SQLException e) { ; }
+			        prepared = null;
+			  }
+
+		}
+
+
+	
+	}
+	
+		
+	/*try {
+			
+			CsvReader products = new CsvReader("products.csv");
+		
+			products.readHeaders();
+
+			while (products.readRecord())
+			{
+				String productID = products.get("ProductID");
+				String productName = products.get("ProductName");
+				String supplierID = products.get("SupplierID");
+				String categoryID = products.get("CategoryID");
+				String quantityPerUnit = products.get("QuantityPerUnit");
+				String unitPrice = products.get("UnitPrice");
+				String unitsInStock = products.get("UnitsInStock");
+				String unitsOnOrder = products.get("UnitsOnOrder");
+				String reorderLevel = products.get("ReorderLevel");
+				String discontinued = products.get("Discontinued");
+				
+				// perform program logic here
+				System.out.println(productID + ":" + productName);
+			}
+	
+			products.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		
+	}
+	
+	
 
 	public static void setWeekUsage() {
 		boolean current = false;
@@ -590,6 +737,7 @@ public class DatabaseQuery {
 					rs = stmt.executeQuery(query);
 						usage = 0;
 						while (rs.next()) {
+			
 							usage += rs.getFloat("CONSUMPTION");
 							count += 0.5;
 						}
@@ -2220,7 +2368,6 @@ public class DatabaseQuery {
 		return date;
 
 	}
-	
 	/*public static String getDayFromCurrent(int days) {
 		String dateFromCurrent = "";
 		Date dateBefore = null;

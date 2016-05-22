@@ -28,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("energytrack2_0")
 public class Energytrack2_0UI extends UI {
 	
+	
 	static final Logger LOGGER = Logger.getLogger(Log4jContextListener.class);
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -37,7 +38,6 @@ public class Energytrack2_0UI extends UI {
 
 	@Override
 	protected void init(VaadinRequest request) {
-		
 		LOGGER.info("New session created!");
 		Navigator navigator = new Navigator(this,this);
 		this.setNavigator(navigator);
